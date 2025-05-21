@@ -1,0 +1,110 @@
+<?php
+
+use App\Http\Controllers\studentcontroller;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Middleware\Authenticate;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+Route::get("schoolproject/index", [studentcontroller::class, "index"])->name("schoolproject.index");
+Route::post("schoolproject/loginform", [studentcontroller::class, "loginform"])->name("schoolproject.loginform");
+// Route::middleware(['auth'])->group(function(){
+
+Route::get("/teachers/payment",[studentcontroller::class, 'teacherspayment'])->name("schoolproject.payment");
+Route::get("schoolproject/dashboard", [studentcontroller::class, "dashboard"])->name("schoolproject.dashboard");
+Route::get("schoolproject/admin-account-settings", [studentcontroller::class, "adminaccount_settings"])->name("schoolproject.adminaccount_settings");
+Route::get("schoolproject/admit_form", [studentcontroller::class, "admit_form"])->name("schoolproject.admit_form");
+Route::post("schoolproject/student_form", [studentcontroller::class, "student_form"])->name("schoolproject.student_form");
+Route::get("schoolproject/all_student", [studentcontroller::class, "all_student"])->name("schoolproject.all_student");
+Route::get("schoolproject/add_class", [studentcontroller::class, "add_class"])->name("schoolproject.add_class");
+Route::get("schoolproject/add_teacher", [studentcontroller::class, "add_teacher"])->name("schoolproject.add_teacher");
+
+Route::get("schoolproject/parentdashboard", [studentcontroller::class, "parentdashboard"])->name("schoolproject.parentdashboard");
+Route::get("schoolproject/studentdashboard", [studentcontroller::class, "studentdashboard"])->name("schoolproject.studentdashboard");
+// Route::get("schoolproject/parentdashboard", [studentcontroller::class, "addparents"])->name("schoolproject.addparents");
+Route::get("schoolproject/teacherdashboard", [studentcontroller::class, "teacherdashboard"])->name("schoolproject.teacherdashboard");
+
+Route::post("schoolproject/addclass",[studentcontroller::class, "addclass"])->name("schoolproject.addclass");
+Route::get("schoolproject/all_class",[studentcontroller::class, "all_class"])->name("schoolproject.all_class");
+Route::get("schoolproject/addparents", [studentcontroller::class, "addparents"])->name ("schoolproject.addparents");
+Route::get("schoolproject/allparents", [studentcontroller::class, "allparents"])->name ("schoolproject.allparents");
+Route::post("schoolproject/teacherform",[studentcontroller::class, "teacherform"])->name("schoolproject.teacherform");
+Route::get("schoolproject/all_teacher",[studentcontroller::class, "all_teacher"])->name("schoolproject.all_teacher");
+Route::get("schoolproject/{id}", [studentcontroller::class, "student_details"])->name("schoolproject.student_details");
+Route::get("schoollproject/{id}", [studentcontroller::class, "teacher_details"])->name("schoolproject.teacher_details");
+Route::delete("schoollproject/{id}", [studentcontroller::class, "delete_class"])->name("schoolproject.delete_class");
+Route::delete("schoolproject/{id}", [studentcontroller::class, "delete_teachers"])->name("schoolproject.delete_teachers");
+Route::delete("schoolprojects/{id}", [studentcontroller::class, "deletestudent"])->name("schoolproject.deletestudent");
+Route::get("schoolprojects/{id}", [studentcontroller::class, "editstudent"])->name("schoolproject.editstudent");
+Route::put("schoolproject/{id}", [studentcontroller::class, "updatestudent"])->name("schoolproject.updatestudent");
+Route::get("scholproject/{id}", [studentcontroller::class, "editteacher"])->name("schoolproject.editteacher");
+Route::put("scholproject/{id}", [studentcontroller::class, "updateteacher"])->name("schoolproject.updateteacher");
+Route::post("schoolproject/parents",[studentcontroller::class, "parents"])->name("schoolproject.parents");
+Route::get('schoolproject/{class}', [studentcontroller::class, 'getStudents']);
+// Route::get("schoolproject/allpar", [studentcontroller::class, 'addparents'])->name("schoolproject/allparents");
+Route::get("parentsdetails/{id}", [studentcontroller::class, "parentsdetails"])->name("schoolproject.parentsdetails");
+Route::post('get-food-types', [studentcontroller::class, 'getTypes']);
+Route::delete("deleteparent/{id}", [studentcontroller::class, "deleteparent"])->name("schoolproject.deleteparent");
+
+Route::get("schoolsproject/{class}", [studentcontroller::class, "viewstudents"])->name("schoolproject.viewstudents");
+Route::get("/transportation", [studentcontroller::class, "transport"])->name("schoolproject.transport");
+Route::post("/transportform", [studentcontroller::class, "transportform"])->name("schoolproject.transportform");
+Route::delete("/deletedriver/{id}", [studentcontroller::class, "deletedriver"])->name("schoolproject.deletedriver");
+Route::get("/hostel-registration", [studentcontroller::class, "hostel"])->name("schoolproject.hostel");
+Route::post("/hostelform", [studentcontroller::class, "hostelform"])->name("schoolproject.hostelform");
+Route::get("/addexpense", [studentcontroller::class, "addexpense"])->name("schoolproject.addexpense");
+Route::get("/allexpense", [studentcontroller::class, "allexpense"])->name("schoolproject.allexpense");
+Route::get("/addbook", [studentcontroller::class, "addbook"])->name("schoolproject.addbook");
+Route::get("/allbook", [studentcontroller::class, "allbook"])->name("schoolproject.allbook");
+Route::get("/allsubject", [studentcontroller::class, "allsubject"])->name("schoolproject.allsubject");
+Route::post("/addsubject", [studentcontroller::class, "addsubject"])->name("schoolproject.addsubject");
+Route::delete("/deletesubject/{id}",[studentcontroller::class, "deletesubject"])->name("schoolproject.deletesubject");
+Route::post("/bookform",[studentcontroller::class,"bookform"])->name("schoolproject.bookform");
+Route::post('get-book-types', [studentcontroller::class,'getBookss']);
+Route::post('getHostel', [studentcontroller::class,'getHostel']);
+Route::get('studentpromotion', [studentcontroller::class,'studentpromotion'])->name("schoolproject.studentpromotion");
+Route::get("/parent-expenses",[studentcontroller::class, "parentexpenses"])->name("schoolproject.parentexpenses");
+Route::get("/parent-notification-result", [studentcontroller::class,"parent_notification"])->name("schoolproject.parent_notification");
+Route::get("/academic-session", [studentcontroller::class, "academic_session"])->name("schoolproject.academic_session");
+Route::post("/academic", [studentcontroller::class, "academic"])->name("schoolproject.academic");
+Route::delete("/delete_session/{id}", [studentcontroller::class, "delete_session"])->name("schoolproject.delete_session");
+Route::delete("/deletebook/{id}", [studentcontroller::class, "deletebook"])->name("schoolproject.deletebook");
+Route::get("/school-billing-package", [studentcontroller::class, "schoolfee"])->name("schoolproject.schoolfee");
+Route::post("/schoolfee_form", [studentcontroller::class, "schoolfee_form"])->name("schoolproject.schoolfee_form");
+Route::get("/each_class_bills", [studentcontroller::class, "each_class_bills"])->name("schoolproject.each_class_bills");
+Route::post("billform", [studentcontroller::class, "billform"])->name("schoolproject.billform");
+Route::delete("deletebill", [studentcontroller::class, "deletebill"])->name("schoolproject.deletebill");
+Route::get("/all_school_bills", [studentcontroller::class, "all_school_bills"])->name("schoolproject.all_school_bills");
+Route::delete("deletebillform{id}", [studentcontroller::class, "deletebillform"])->name("schoolproject.deletebillform");
+Route::get("/mystudent{class}", [studentcontroller::class, "mystudent"])->name("schoolproject.mystudent");
+Route::get("/noticeboard", [studentcontroller::class, "noticeboard"])->name("schoolproject.noticeboard");
+Route::post("noticeform", [studentcontroller::class, "noticeform"])->name("schoolproject.noticeform");
+Route::get("teacher_accountsettings/{id}", [studentcontroller::class, "teacher_accountsettings"])->name("schoolproject.teacher_accountsettings");
+Route::put("teachereditprofile/{id}", [studentcontroller::class, "teachereditprofile"])->name("schoolproject.teachereditprofile");
+Route::get("teacher-profile/{id}", [studentcontroller::class, "teacherprofile"])->name("schoolproject.teacherprofile");
+Route::get("messaging/", [studentcontroller::class, "messaging"])->name("schoolproject.messaging");
+Route::get("map/", [studentcontroller::class, "map"])->name("schoolproject.map");
+Route::get("exam_grade/", [studentcontroller::class, "exam_grade"])->name("schoolproject.exam_grade");
+Route::get("student_subjects/{classteacher}", [studentcontroller::class, "student_subjects"])->name("schoolproject.student_subjects");
+// Route::post("subjectform/", [studentcontroller::class, "subjectform"])->name("schoolproject.subjectform");
+Route::match(['get', 'post'], 'subjectform/', [StudentController::class, 'subjectform'])->name('schoolproject.subjectform');
+Route::get("uploadresult/", [studentcontroller::class, "uploadresult"])->name("schoolproject.uploadresult");
+Route::get("classSubject/", [studentcontroller::class, "classSubject"])->name("schoolproject.classSubject");
+Route::post("resultform/", [studentcontroller::class, "resultform"])->name("schoolproject.resultform");
+Route::post("schoolSetForm/", [studentcontroller::class, "schoolSetForm"])->name("schoolproject.schoolSetForm");
+// });
+Route::get("school_setting/", [studentcontroller::class,"school_setting"])->name("schoolproject.school_setting");
+Route::get("forgot-password/", [studentcontroller::class, "forgotpassword"])->name("schoolproject.forgotpassword");
+Route::post("forgotform/", [studentcontroller::class, "forgotform"])->name("schoolproject.forgotform");
+Route::get("change-password/", [studentcontroller::class, "changepassword"])->name("schoolproject.changepassword");
+Route::put("passwordform", [studentcontroller::class, "passwordform"])->name("schoolproject.passwordform");
+Route::get("selectstudent/{id}", [studentcontroller::class, "selectstudent"])->name("schoolproject.selectstudent");
+Route::get("addresult/{id}", [studentcontroller::class, "addresult"])->name("schoolproject.addresult");
