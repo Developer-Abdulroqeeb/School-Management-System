@@ -156,9 +156,9 @@ public function admit_form(Request $request){
     ->distinct()
     ->pluck('hostel_name')
     ->toArray();
-
+$parent = DB::table("studentparents")->get();
 $subjectclass = array_combine($classesi, $classesi);
-    return view("schoolproject.admit_form", compact('classes',"sessions","transport","subjectclass"));
+    return view("schoolproject.admit_form", compact('classes',"sessions","transport","subjectclass","parent"));
 
 }
 
@@ -189,7 +189,8 @@ public function student_form(Request $request){
        "transport"=>$request->transport,
        "room_number" =>$request->room_number,
        "session" =>$request->session,
-       "term" =>$request->term
+       "term" =>$request->term,
+       "parent_id" =>$request->parent_id
     ]);
     return redirect()->route("schoolproject.admit_form");
 }
@@ -223,7 +224,7 @@ public function add_teacher(Request $request){
   public function student_details(Request $request, $id){
  
     $students  = DB::table('student-information')
-    ->join('studentparents', 'student-information.id', '=', 'studentparents.child_name')
+    ->join('studentparents', 'studentparents.id', '=', 'student-information.parent_id')
     ->select('student-information.*','studentparents.*','studentparents.phone as phonenumber','studentparents.Surname as parentname')
     ->get();
       return view('schoolproject.student_details', compact('students'));
@@ -388,14 +389,15 @@ return view("schoolproject.editteacher", compact("teacher", "classes"));
     ->toArray();
 
 $foodClasses = array_combine($classesi, $classesi);
-
+// $selectParent = DB::table("studentparents")->get();
     return view("schoolproject/addparents", compact("foodClasses"));
 }
 public function parents(Request $request){
   $rand = mt_rand(100, 1000);
-
+  $random = mt_rand(10,99);
   $insert = DB::table("studentparents")->insert(values:[
 "Surname" =>$request->Surname,
+"OtherName" =>$request->OtherName,
 "child_name" =>$request->child_name,
 "gender" =>$request->gender,
 "occupation" =>$request->occupation,
@@ -405,9 +407,7 @@ public function parents(Request $request){
 "phone" =>$request->phone,
 "child_class"=>$request->child_class,
 "password" =>$request->Surname.$rand,
-"username"=>$request->Surname
-// "child_name"=>$request->child_name
-
+"username"=> $request->Surname.$random
   ]);
   return redirect()->route("schoolproject.addparents");
 }
@@ -428,6 +428,26 @@ public function parents(Request $request){
         return response()->json($foodTypes[$request->food_class] ?? []);
     
       }
+// existing parent update
+
+public function existingParent(Request $request){
+  $ParentId  = $request->ParentId;
+  $Newchild = $request->Newchild;
+  $selectParent = DB::table("studentparents")->where("id",$ParentId)->first();
+  $username = $selectParent->username;
+  $password = $selectParent->password;
+  $surname = $selectParent->Surname;
+  $othername = $selectParent->OtherName;
+  $insertNEWParent = DB::table("studentparents")->insert(values:[
+   "username" => $username,
+   "password" => $password,
+   "Surname" =>$surname,
+   "OtherName" =>$othername,
+   "existing_parent" => $ParentId,
+   "child_name" => $Newchild
+  ]);
+  return redirect()->route("schoolproject.addparents");
+}
 
 // gert all parents
 
@@ -449,6 +469,39 @@ public function deleteparent(Request $request,$id){
   return redirect()->route("schoolproject.allparents");
 
 }
+// parent profile setting
+public function parent_accountsettings($id){
+  $parent = DB::table("studentparents")->where("id", $id)->first();
+  return view("schoolproject.parent_accountsettings", compact("parent"));
+}
+// update teacher profile
+public function parenteditprofile(Request $request,$id){
+  
+ $oldPassword = $request->old_password;
+ $checkPassword = DB::table("studentparents")->where("id", $id)->first();
+ if($checkPassword && $checkPassword->password === $oldPassword){
+
+  if ($request->hasFile('file_upload')) {
+  $image = $request->file(key: 'file_upload');
+  $path = $image->store('uploads','public');
+  }else {
+    $path = $checkPassword->profileImage; // Keep old image if no new upload
+}
+
+ $edit = DB::table("studentparents")->where("id", $id)->update([
+  "profileImage" => $path,
+  "password" => $request->confirm_password
+]);
+return redirect()->route("schoolproject.parentdash");
+ }else{
+  return back()->withErrors(['old_password' => 'Old password not correct']);
+ }
+
+}
+
+
+
+
 //  view student in each class
 
 
@@ -508,8 +561,32 @@ public function studentdashboard(Request $request){
   return view("schoolproject.studentdashboard");
 }
  public function parentdashboard(Request $request){
-    return view("schoolproject.parentdashboard");
+  $parentId = Session::get("parent_id");
+  $parent = DB::table("studentparents")->where("id", $parentId)->first();
+  $notice_count = notice::where("notice_for", "parent")->count();
+  $student = DB::table("student-information")->where("parent_id", $parentId)->get();
+ 
+  $class = DB::table('student-information')
+        ->where('parent_id', $parentId)
+        ->pluck('class')
+        ->unique();
+  $term = DB::table('student-information')
+        ->where('parent_id', $parentId)
+        ->pluck('term')
+        ->unique();
+  $session = DB::table('student-information')
+        ->where('parent_id', $parentId)
+        ->pluck('session')
+        ->unique();
 
+  $totalExpenses = schoolfee::whereIn('class', $class)
+        ->where( [
+          'term' =>$term,
+          'session'=> $session
+          ])
+        ->sum('amount');
+  return view("schoolproject.parentdash", 
+  compact("parent","student","notice_count","class","term","session","totalExpenses"));
  }
  public function teacherdashboard(Request $request){
   $teacherId = Session::get("teacher_id");
@@ -709,7 +786,10 @@ public function delete_session(Request $request, $id){
 }
 public function schoolfee(Request $request){
   $query = DB::table("studentclasses")->get();
-  $sql = DB::table("academicsessions")->get();
+  $sql = DB::table("academicsessions")
+  ->select("academic_session")
+  ->distinct()
+  ->get();
   $school_package = DB::table("schoolfees")->select('session','term','class')->distinct()->get();
   return view("schoolproject.schoolfee", compact("query","sql","school_package"));
 }
@@ -793,13 +873,59 @@ public function each_class_bills(Request $request){
   }
   // parent expense
   public function parentexpenses(Request $request){
-    return view("schoolproject.parentexpenses");
+    $parent_id = Session::get("parent_id");
+    $student = DB::table("student-information")->where("parent_id", $parent_id)->get();
+    return view("schoolproject.parentexpenses", compact("student"));
+  }
+  public function viewexpenses(Request $request){
+      return view("schoolproject.viewexpenses");
+       
+  }
+    public function viewexpenseform(Request $request){
+       $class = $request->class;
+       $session = $request->session;
+       $term = $request->term;
+
+       $fetch_expense = DB::table("schoolfees")->where([
+        "class" => $class,
+        "session" => $session,
+        "term" => $term
+       ])->get();
+
+       $fetchs = DB::table("schoolfees")->where([
+        "class" => $class,
+        "session" => $session,
+        "term" => $term
+        ])->select('class','session','term')->distinct()->get();
+
+        $total =  DB::table("schoolfees")->where([
+          'class' => $class,
+          'session' => $session,
+          'term' => $term
+          ])->sum('amount');
+  
+         
+
+       return view("schoolproject.viewexpenses", compact("fetch_expense","fetchs","total"));
+    }
+
+  public function parent_result(Request $request){
+    $parentId = Session::get("parent_id");
+    $getChild = DB::table("student-information")->where('parent_id', $parentId)->get();
+    $class = DB::table("studentclasses")->get();
+    $academic = DB::table("academicsessions")
+    ->select("academic_session")
+    ->distinct()
+    ->get();
+    return view("schoolproject.parent_result", compact("getChild", "class","academic"));
   }
 
-  public function parent_notification(Request $request){
-    return view("schoolproject.parent_notification");
+  public function parentprofile(Request $request){
+    $parent_id = Session::get("parent_id");
+    $profile = DB::table("studentparents")->where("id", $parent_id)->first();
+    $children = DB::table("student-information")->where("parent_id", $parent_id)->get();
+    return view("schoolproject.parentprofile", compact("profile","children"));
   }
-
   // teacher page starts here
 public function mystudent($class){
   
@@ -830,7 +956,7 @@ public function teachereditprofile(Request $request,$id){
 ]);
 return redirect()->route("schoolproject.teacherdashboard");
  }else{
-  return back()->withErrors(['old_password' => 'Old password no dey correct brr']);
+  return back()->withErrors(['old_password' => 'Old Password is not correct']);
  }
 
 }
@@ -929,14 +1055,45 @@ public function resultform(Request $request){
 
 }
 public function school_setting(Request $request){
-  return view("schoolproject.school_setting");
+  $select = DB::table("school_settings")->where("id",1)->first();
+  return view("schoolproject.school_setting", compact("select"));
 }
 public function schoolSetForm(Request $request){
   
-  $image = $request->file(key: 'file_upload');
-  $path = $image->store('uploads','public');
+  if ($request->hasFile('file_upload')) {
+    $image = $request->file(key: 'file_upload');
+    $path = $image->store('uploads','public');
+    }
+$insert = DB::table("school_settings")->insert(values:[
 
-  return view("schoolproject.school_setting");
+"SchoolName" =>$request->SchoolName,
+"SchoolImage" =>$path,
+"SchoolMotto" =>$request->SchoolMotto,
+"SchoolLocation" =>$request->SchoolLocation,
+"SchoolAbr" =>$request->SchoolAbr
+]);
+  return redirect()->route(route: "schoolproject.school_setting");
+}
+
+public function promoteStudent(Request $request){
+  $class = DB::table("studentclasses")->get();
+  return view("schoolproject.promoteStudent", compact("class"));
+}
+public function makePromotion($class){
+  $student = DB::table("student-information")
+   ->where("class",$class)
+  ->get();
+
+ $class = DB::table("studentclasses")->get();
+  return view("schoolproject.makePromotion", compact("student","class"));
+}
+public function promoteForm(Request $request){
+  $studentId = $request->studentId;
+  // $classupdate = $request->class;
+  $update = DB::table("student-information")->where("id",$studentId)->update([
+       "class" =>$request->class
+  ]);
+  return redirect()->route("schoolproject.promoteStudent");
 }
 }
 

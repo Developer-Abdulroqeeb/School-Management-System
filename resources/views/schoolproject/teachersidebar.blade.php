@@ -33,5 +33,6 @@
                         <li class="nav-item sidebar-nav-item"> 
                             <a href="{{route("schoolproject.uploadresult")}}" class="nav-link"><i class="fa fa-pen"></i><span>Upload Results</span></a>
                         </li>
+                       
                     </ul>
                 </div>

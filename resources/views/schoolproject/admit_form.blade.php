@@ -68,7 +68,7 @@
                     <div class="card-body">
                         <div class="heading-layout1">
                             <div class="item-title">
-                                <h3>Add New Parents</h3>
+                                <h3>Add New Student</h3>
                             </div>
                            <div class="dropdown">
                                 <a class="dropdown-toggle" href="#" role="button" 
@@ -220,6 +220,16 @@
                                                <option value="Second Term">Second Term</option>
                                                         <option value="Third Term">Third Term</option>
                
+                                    </select>
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group" >
+                                    <label>Select Parent *</label>
+                                    <select  required name="parent_id" class="select2" >
+                                      
+                                        <option disabled value="">-- Select a Term --</option>
+                                        @foreach ($parent as $parents)
+                                        <option value="{{$parents->id}}">{{$parents->Surname}} {{$parents->OtherName}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-lg-6 col-12 form-group">

@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class studentparent extends Model
 {
     use HasFactory;
-    public $fillable = ['Surname','gender','occupation',
+    public $fillable = ['Surname','gender','occupation',"OtherName","profileImage",
     'religion','email','address','phone','child_name','child_class',"password","username"];
 }

@@ -37,23 +37,7 @@
     <div id="wrapper" class="wrapper bg-ash">
         <!-- Header Menu Area Start Here -->
         <div class="navbar navbar-expand-md header-menu-one bg-light">
-            {{-- @include('schoolproject.navigationbar')   --}}
-<div class="nav-bar-header-one">
-                    <div class="header-logo">
-                        <a href="index.html">
-                            <img src="{{asset ('img/logo.png')}}" alt="logo">
-                        </a>
-                    </div>
-                     <div class="toggle-button sidebar-toggle">
-                        <button type="button" class="item-link">
-                            <span class="btn-icon-wrap">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
+            @include('schoolproject.parentnavbar')  
                 <div class="d-md-none mobile-nav-bar">
                    <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false">
                         <i class="far fa-arrow-alt-circle-down"></i>
@@ -80,31 +64,16 @@
                         <li>
                             <a href="index.html">Home</a>
                         </li>
-                        <li>Parents</li>
+                        <li>Expenses</li>
                     </ul>
                 </div>
-                <!-- Breadcubs Area End Here -->
-                <!-- Dashboard summery Start Here -->
                 
-                  .  <div class="col-7-xxxl col-12">
+                   <div class="col-7-xxxl col-12">
                         <div class="card dashboard-card-eleven">
                             <div class="card-body">
                                 <div class="heading-layout1">
                                     <div class="item-title">
-                                        <h3>All Expenses</h3>
-                                    </div>
-                                    <div class="dropdown">
-                                        <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                                            aria-expanded="false">...</a>
-
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="fas fa-times text-orange-red"></i>Close</a>
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-                                        </div>
+                                        <h3>Check Expenses</h3>
                                     </div>
                                 </div>
                                 <div class="table-box-wrap">
@@ -114,13 +83,7 @@
                                                 <input type="text" placeholder="Search by Exam ..."
                                                     class="form-control">
                                             </div>
-                                            <div class="col-lg-3 col-md-3 form-group">
-                                                <input type="text" placeholder="Search by Subject ..."
-                                                    class="form-control">
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 form-group">
-                                                <input type="text" placeholder="dd/mm/yyyy" class="form-control">
-                                            </div>
+                                            
                                             <div class="col-lg-2 col-md-3 form-group">
                                                 <button type="submit"
                                                     class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
@@ -137,15 +100,17 @@
                                                             <label class="form-check-label">ID</label>
                                                         </div>
                                                     </th>
-                                                    <th>Expanse</th>
-                                                    <th>Amount</th>
-                                                    <th>Status</th>
-                                                    <th>E-Mail</th>
-                                                    <th>Date</th>
-                                                    <th></th>
+                                                    <th>Child Name</th>
+                                                    <th>Class</th>
+                                                    {{-- <th>Total Expenses Amount</th> --}}
+                                                    <th>Session</th>
+                                                    <th>Term</th>
+                                                    <th>Action</th>
+                                                    {{-- <th></th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
+                               @foreach ($student as $students)
                                                 <tr>
                                                     <td>
                                                         <div class="form-check">
@@ -153,29 +118,25 @@
                                                             <label class="form-check-label">#0021</label>
                                                         </div>
                                                     </td>
-                                                    <td>Exam Fees</td>
-                                                    <td>$150.00</td>
-                                                    <td class="badge badge-pill badge-success d-block mg-t-8">Paid</td>
-                                                    <td>akkhorschool@gmail.com</td>
-                                                    <td>22/02/2019</td>
+                                                    <td>{{$students->FirstName}} {{$students->LastName}} {{$students->OtherName}}</td>
+                                                    <td>{{$students->class}}</td>
+                                                    <td>{{$students->session}}</td>
+                                                    <td>{{$students->term}}</td>
+                                               
                                                     <td>
                                                         <div class="dropdown">
-                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                                                                aria-expanded="false">
-                                                                <span class="flaticon-more-button-of-three-dots"></span>
-                                                            </a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item" href="#"><i
-                                                                        class="fas fa-times text-orange-red"></i>Close</a>
-                                                                <a class="dropdown-item" href="#"><i
-                                                                        class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                                                                <a class="dropdown-item" href="#"><i
-                                                                        class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-                                                            </div>
+                                                            <form  method="POST" action="{{route("schoolproject.viewexpenseform")}}" >
+                                                                @csrf
+                                                                <input type="hidden" value="{{$students->class}}" name="class">
+                                                                <input type="hidden" value="{{$students->session}}" name="session">
+                                                                <input type="hidden" value="{{$students->term}}" name="term">
+                                                            <button type="submit" name="submit"  class="dropdown-item">View <i
+                                                                class="fas fa-eye text-orange-red"></i> </button>
+                                                            </form> 
                                                         </div>
                                                     </td>
                                                 </tr>
-                                              
+                                                @endforeach   
                                             </tbody>
                                         </table>
                                     </div>

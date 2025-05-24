@@ -104,8 +104,13 @@
  
                                 <form class="new-added-form" method="POST" action="{{route("schoolproject.schoolSetForm")}}" enctype="multipart/form-data" >
                                     @csrf
-                                    <img src="{{asset("img/figure/admin.jpg")}}" class="image_pick" alt="a">
-                                    <div class="row" style="flex-direction: column;">
+                                @if (empty( $select->SchoolImage))
+                                <img src="{{asset("img/figure/admin.jpg")}}" class="image_pick" alt="a">
+                                @endif
+                                @if (!empty( $select->SchoolImage))
+                                <img src="{{asset("storage/".$select->SchoolImage)}}" class="image_pick" alt="a">
+                                @endif
+                                <div class="row" style="flex-direction: column;">
                                         
                                         <label class="camera-icon-label">
                                         {{-- <label>School Logo</label> --}}
@@ -116,16 +121,21 @@
                                             <label>School Name</label>
                                             <input type="text" value="" name="SchoolName" placeholder="" class="form-control">
                                         </div>
-                                        @if($errors->any())
-                                        <p style="color:red;">{{ $errors->first()}}</p>
-                                    @endif
+                                        <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                            <label>School Motto</label>
+                                            <input type="text" id="location-input" name="SchoolMotto" placeholder="" class="form-control">
+                                        </div> 
+                                        <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                            <label>School Abbrevation</label>
+                                            <input type="text" id="location-input" name="SchoolAbr" placeholder="" class="form-control">
+                                        </div> 
+                                    
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
                                             <label>School Location</label>
-                                            <input type="text" id="" name="SchoolLoaction
-                                            " placeholder="" class="form-control">
+                                            <input type="text" id="location-input" name="SchoolLocation" placeholder="" class="form-control">
                                         </div> 
                                         <div class="col-12 form-group mg-t-8">
-                                            <button type="submit" id="button" disabled
+                                            <button type="submit" id="button"
                                              class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
                                             {{-- <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button> --}}
                                         </div>
@@ -145,6 +155,25 @@
         </div>
         <!-- Page Area End Here -->
     </div>
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+        <script>
+            function initializeAutocomplete() {
+                const input = document.getElementById('location-input');
+                const autocomplete = new google.maps.places.Autocomplete(input);
+    
+                // Optional: restrict autocomplete to a specific country
+                // autocomplete.setComponentRestrictions({'country': ['us']});
+    
+                // Optional: respond to place changed
+                autocomplete.addListener('place_changed', function () {
+                    const place = autocomplete.getPlace();
+                    console.log('Selected place:', place);
+                    // You can extract lat, lng, or address components here if needed
+                });
+            }
+    
+            google.maps.event.addDomListener(window, 'load', initializeAutocomplete);
+        </script>
     <!-- jquery-->
     <script src="/js/jquery-3.3.1.min.js"></script>
     <!-- Plugins js -->
@@ -167,19 +196,7 @@ const   image_file = document.querySelector(".image_file");
 image_file.addEventListener("change", ()=>{
 image.src=URL.createObjectURL(image_file.files[0]);
 });
-const newpassword = document.getElementById("newpassword");
-const cpassword = document.getElementById("cpassword");
-const btn = document.getElementById("button");
-const error = document.getElementById("error");
-cpassword.addEventListener("input", function(e){
-    if(newpassword.value === cpassword.value){
-        btn.disabled = false;
-        error.textContent = "Password  match";
-    }else{
-        btn.disabled = true;
-        error.textContent = "Password does not match";
-    }
-});
+
    </script>
 </body>
 

@@ -70,14 +70,14 @@
     <div id="wrapper" class="wrapper bg-ash">
          <!-- Header Menu Area Start Here -->
          <div class="navbar navbar-expand-md header-menu-one bg-light">
-            @include('schoolproject.teachernav')  
+            @include('schoolproject.parentnavbar')  
         </div>
         <!-- Header Menu Area End Here -->
         <!-- Page Area Start Here -->
         <div class="dashboard-page-one">
             <!-- Sidebar Area Start Here -->
            <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
-               @include("schoolproject.teachersidebar")
+               @include("schoolproject.parentsidebar")
             </div>
             <!-- Sidebar Area End Here -->
             <div class="dashboard-content-one">
@@ -103,22 +103,23 @@
                                     </div>
                                 </div>
  
-                                <form class="new-added-form" method="POST" enctype="multipart/form-data" action="{{route("schoolproject.teachereditprofile", $teacher->id)}}">
+                                <form class="new-added-form" method="POST" enctype="multipart/form-data" action="{{route("schoolproject.parenteditprofile", $parent->id)}}">
                                     @method("PUT")
                                     @csrf
-                                    @if (empty($teacher->profileImage))
+                                    @if (empty( $parent->profileImage))
                                     <img src="{{asset("img/figure/admin.jpg")}}" class="image_pick" alt="a">
                                     @endif
-                                    <img src="{{ asset('storage/' . $teacher->profileImage) }}" class="image_pick" alt="">
+                                      @if (!empty( $parent->profileImage))
+                                    <img src="{{asset("storage/".$parent->profileImage)}}" class="image_pick" alt="">
+                                   @endif
                                     <div class="row" style="flex-direction: column;">
                                         <label class="camera-icon-label">
                                             <input type="file" class="image_file" name="file_upload" accept="image/*">
                                             <i class="camera-icon">📷</i> <!-- This is where the camera logo goes -->
                                           </label>
-
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
                                             <label>Old Password *</label>
-                                            <input type="text" value="{{$teacher->password}}" name="old_password" placeholder="" class="form-control">
+                                            <input type="text" value="" name="old_password" placeholder="" class="form-control">
                                         </div>
                                         @if($errors->any())
                                         <p style="color:red;">{{ $errors->first() }}</p>

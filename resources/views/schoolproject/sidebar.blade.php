@@ -14,6 +14,20 @@
                             </ul>
                         </li>
                         <li class="nav-item sidebar-nav-item">
+                            <a href="#" class="nav-link"><i class="flaticon-couple"></i><span>Parents</span></a>
+                            <ul class="nav sub-group-menu">
+                                <li class="nav-item">
+                                    <a href="{{route("schoolproject.allparents")}}" class="nav-link"><i class="fas fa-angle-right"></i>All Parents</a>
+                                </li>
+                                {{-- <li class="nav-item">
+                                    <a href="parents-details.html" class="nav-link"><i class="fas fa-angle-right"></i>Parents Details</a>
+                                </li> --}}
+                                <li class="nav-item">
+                                    <a href="{{route("schoolproject.addparents")}}" class="nav-link"><i class="fas fa-angle-right"></i>Add Parent</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item sidebar-nav-item">
                             <a href="#" class="nav-link"><i class="flaticon-classmates"></i><span>Students</span></a>
                             <ul class="nav sub-group-menu">
                                 <li class="nav-item">
@@ -45,20 +59,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item sidebar-nav-item">
-                            <a href="#" class="nav-link"><i class="flaticon-couple"></i><span>Parents</span></a>
-                            <ul class="nav sub-group-menu">
-                                <li class="nav-item">
-                                    <a href="{{route("schoolproject.allparents")}}" class="nav-link"><i class="fas fa-angle-right"></i>All Parents</a>
-                                </li>
-                                {{-- <li class="nav-item">
-                                    <a href="parents-details.html" class="nav-link"><i class="fas fa-angle-right"></i>Parents Details</a>
-                                </li> --}}
-                                <li class="nav-item">
-                                    <a href="{{route("schoolproject.addparents")}}" class="nav-link"><i class="fas fa-angle-right"></i>Add Parent</a>
-                                </li>
-                            </ul>
-                        </li>
+                       
                         <li class="nav-item sidebar-nav-item">
                             <a href="#" class="nav-link"><i class="flaticon-books"></i><span>Library</span></a>
                             <ul class="nav sub-group-menu sub-group-active">
@@ -163,8 +164,16 @@
                                 </li> --}}
                             </ul>
                         </li>
-                        <li class="nav-item">`
+                        {{-- <li class="nav-item">`
                             <a href="{{route("schoolproject.map")}}" class="nav-link"><i class="flaticon-planet-earth"></i><span>Map</span></a>
+                        </li> --}}
+                        <li class="nav-item sidebar-nav-item">
+                            <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Student Promotion</span></a>
+                            <ul class="nav sub-group-menu">
+                                   <li class="nav-item">
+                                    <a href="{{route("schoolproject.promoteStudent")}}" class="nav-link"><i class="fas fa-angle-right"></i>Promote student</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="{{route("schoolproject.school_setting")}}" class="nav-link"><i class="flaticon-settings"></i><span>School Setting</span></a>

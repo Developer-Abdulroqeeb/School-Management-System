@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('studentparents', function (Blueprint $table) {
             $table->id();
             $table->string("Surname");
-     
+            $table->string("OtherName");
             $table->string("gender")->nullable();
             $table->string("occupation")->nullable();
             $table->string("religion")->nullable();
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string("child_class");
             $table->string("password");
             $table->string("username");
+            $table->string("profileImage");
             $table->timestamps();
 
         });

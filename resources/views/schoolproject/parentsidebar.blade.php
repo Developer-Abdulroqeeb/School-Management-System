@@ -8,7 +8,7 @@
                             <a href="{{route("schoolproject.parentexpenses")}}" class="nav-link"><i class="flaticon-books"></i><span>Expenses</span></a>
                         </li>
                             <li class="nav-item sidebar-nav-item">
-                            <a href="{{route("schoolproject.parent_notification")}}" class="nav-link"><i class="flaticon-books"></i><span>Results and Notifications</span></a>
+                            <a href="{{route("schoolproject.parent_result")}}" class="nav-link"><i class="fa fa-book"></i><span>Results </span></a>
 
                         </li>
                         

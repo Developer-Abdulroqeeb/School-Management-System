@@ -36,6 +36,7 @@ return new class extends Migration
   $table->string("transport")->nullable();
   $table->string("room_number")->nullable();
   $table->string("session");
+  $table->string("parent_id");
   $table->string("term");
   $table->timestamps();
         });

@@ -32,6 +32,28 @@
     <link rel="stylesheet" href="{{asset("css/style.css")}}">
     <!-- Modernize js -->
     <script src="/js/modernizr-3.6.0.min.js"></script>
+    <style>
+        /* .button-click{
+            display: flex;
+           align-items: center;
+           gap: 20px;
+        }
+        .button-click button{
+            color: white;
+            background: rgb(21, 21, 130);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid  rgb(21, 21, 130);
+            cursor: pointer;
+        }
+        .exist{
+            margin: 30px 0 0 0;
+            display: none;
+        } */
+        /* .New_parent{
+            display: block;
+        } */
+    </style>
 </head>
 
 <body>
@@ -69,18 +91,16 @@
                         <div class="heading-layout1">
                             <div class="item-title">
                                 <h3>Add New Parents</h3>
+                              
                             </div>
-                           <div class="dropdown">
-                                <a class="dropdown-toggle" href="#" role="button" 
-                                data-toggle="dropdown" aria-expanded="false">...</a>
-        
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
-                                    <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                                    <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-                                </div>
-                            </div>
+                           {{-- <div class="dropdown">
+                            <div class="button-click">
+                                <p><b>Parent Already Exist?</b></p>
+                                <button id="button">Click Here</button>
+                                  </div>
+                            </div> --}}
                         </div>
+                        <div class="New_parent" id="New_parent">
                         <form class="new-added-form" method="POST" action="{{route("schoolproject.parents")}}">
                             @csrf
                             <div class="row">
@@ -89,6 +109,11 @@
                                     <label>Surname</label>
                                     <input type="text" name="Surname" placeholder="" class="form-control">
                                 </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label>Other Name</label>
+                                    <input type="text" name="OtherName" placeholder="" class="form-control">
+                                </div>
+                                
                                 <div class="col-xl-3 col-lg-6 col-12 form-group">
                                     <label>Gender *</label>
                                     <select class="select2" name="gender">
@@ -126,7 +151,7 @@
                                     <label>Phone</label>
                                     <input type="text" name="phone" placeholder="" class="form-control">
                                 </div>
-                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                {{-- <div class="col-xl-3 col-lg-6 col-12 form-group">
                                     <label>Child Class *</label>
                                     <select class="select2" name="child_class" id="food_class">
                                         <option value="">-- Select a class --</option>
@@ -135,24 +160,21 @@
                                         @endforeach
                                     </select>
                                 
-                                </div>
-                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                </div> --}}
+                                {{-- <div class="col-xl-3 col-lg-6 col-12 form-group">
                                     <label>Child Name *</label>
                                     <select id="food_type" name="child_name" class="select2" >
-                                        {{-- <option value="" disabled>Select Student Name*</option> --}}
                                         <option value="">-- Select a type --</option>
-                                        {{-- <option value=""></option> --}}
-                                      
                                     </select>
-                                    {{-- <input type="hidden" name="password">
-                                    <input type="hidden" name="username"> --}}
-                                </div>
+                                </div> --}}
                                 <div class="col-12 form-group mg-t-8">
                                     <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
                                     {{-- <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button> --}}
                                 </div>
                             </div>
                         </form>
+                    </div>
+                      
                     </div>
                 </div>
                 <!-- Add New Teacher Area End Here -->
@@ -163,6 +185,7 @@
         </div>
         <!-- Page Area End Here -->
     </div>
+  
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -192,6 +215,10 @@
                 }
             });
         });
+
+        // new select option for the existing parent
+      
+
     </script>
     <!-- jquery-->
     <script src="/js/jquery-3.3.1.min.js"></script>

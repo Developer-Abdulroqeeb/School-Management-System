@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AKKHOR | Teacher Profile</title>
+    <title>AKKHOR | Parent Profile</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -36,23 +36,23 @@
     <div id="wrapper" class="wrapper bg-ash">
          <!-- Header Menu Area Start Here -->
          <div class="navbar navbar-expand-md header-menu-one bg-light">
-            @include('schoolproject.teachernav')  
+            @include('schoolproject.parentnavbar')  
         </div>
         <!-- Header Menu Area End Here -->
         <!-- Page Area Start Here -->
         <div class="dashboard-page-one">
             <!-- Sidebar Area Start Here -->
             <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
-                @include("schoolproject.teachersidebar")
+                @include("schoolproject.parentsidebar")
              </div>
             <!-- Sidebar Area End Here -->
             <div class="dashboard-content-one">
                 <!-- Breadcubs Area Start Here -->
                 <div class="breadcrumbs-area">
-                    <h3>Teacher</h3>
+                    <h3>Parent</h3>
                     <ul>
                         <li>
-                            <a href="{{route("schoolproject.dashboard")}}">Home</a>
+                            <a href="{{route("schoolproject.parentdashboard")}}">Home</a>
                         </li>
                         <li>My profile</li>
                     </ul>
@@ -84,36 +84,31 @@
 
                                             <tr>
                                                 <td>Name:</td>
-                                                <td class="font-medium text-dark-medium">{{$teacher->firstname}} {{$teacher->lastname}}</td>
+                                                <td class="font-medium text-dark-medium">{{$profile->Surname}} {{$profile->OtherName}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Gender:</td>
-                                                <td class="font-medium text-dark-medium">{{$teacher->gender}}</td>
-                                            </tr>
-                                            <tr>
-                                        <td>Salary:</td>
-                                        <td class="font-medium text-dark-medium">{{$teacher->salary}}</td>
-                                        </tr>
-                                        <tr>
-                                       <td>starting date:</td>
-                                        <td class="font-medium text-dark-medium">{{$teacher->starting_date}}</td>
-                                       </tr>
-                                        <tr>
-                                        <td>Account Number:</td>
-                                        <td class="font-medium text-dark-medium">{{$teacher->account_number}}</td>
-                                         </tr>
-                                         <tr>
-                                                            <td>Account Name:</td>
-                                                            <td class="font-medium text-dark-medium">{{$teacher->account_name}}</td>
-                                                             </tr>
-                                                             <tr>
-                                                                                <td>Role:</td>
-                                                                                <td class="font-medium text-dark-medium">{{$teacher->role}}</td>
-                                                                                 </tr>    
-                                                                                 <tr>
-                                                      <td>Class Teacher:</td>
-                                                        <td class="font-medium text-dark-medium">{{$teacher->classteacher}}</td>
-                                                                                                     </tr>                                    
+                                                            <td>Email:</td>
+                                                            <td class="font-medium text-dark-medium">{{$profile->email}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Phone:</td>
+                                                            <td class="font-medium text-dark-medium">{{$profile->phone}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Address:</td>
+                                                            <td class="font-medium text-dark-medium">{{$profile->address}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Occupation:</td>
+                                                            <td class="font-medium text-dark-medium">{{$profile->occupation}} </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Child(ren) Name:</td>
+                                                            @foreach ($children as $kids )
+                                                            <td class="font-medium text-dark-medium" style="display:flex; flex-direction:column;"><span>{{$kids->FirstName}} {{$kids->LastName}} {{$kids->OtherName}}</span></td>                  
+                                                            @endforeach
+                                                           
+                                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
