@@ -71,11 +71,12 @@
                 </div>
                 <!-- Breadcubs Area End Here -->
                 <!-- Dashboard summery Start Here -->
-                <form class="new-added-form" method="POST" action="">
-                <div class="row" style="background: white; padding:20px;">
+                <form class="new-added-form" method="POST" action="{{route("schoolproject.checkresultform")}}">
+                @csrf
+                    <div class="row" style="background: white; padding:20px;">
                     <div class="col-xl-3 col-lg-6 col-12 form-group">
                         <label>Child Name *</label>
-                    <select name="" required class="select2" id="">
+                    <select name="child_id" required class="select2" id="">
                         @foreach ( $getChild as $children)
                         <option value="{{$children->id}}">{{$children->FirstName}} {{$children->LastName}} {{$children->OtherName}}</option>
                         @endforeach
@@ -84,7 +85,7 @@
                 </div>
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
                     <label>Class</label>
-                    <select class="select2" required name="" id="">
+                    <select class="select2" required name="class" id="">
                         @foreach ($class as $studentclass)
                         <option value="{{ $studentclass->class}}">
                             {{ $studentclass->class}}
@@ -95,7 +96,7 @@
                 </div>
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
                     <label>Term</label>
-                    <select class="select2"  required name="" id="">
+                    <select class="select2"  required name="term" id="">
                         <option value="First Term">
                             First Term
                         </option>
@@ -109,7 +110,7 @@
                 </div>
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
                     <label>Session</label>
-                    <select class="select2"  required name="" id="">
+                    <select class="select2"  required name="session" id="">
                        @foreach ($academic as $session )
                        <option value="{{$session->academic_session }}">
                        {{$session->academic_session}} 
@@ -117,7 +118,9 @@
                        @endforeach
                     </select>
                 </div>
+                <button type="submit" name="submit" style="background: rgb(25, 25, 118); padding: 10px; border-radius: 10px; border: 0; color: white;">Continue</button>
                 </div>
+
                 </form>
                 <footer class="footer-wrap-layout1">
                     <div class="copyright">© Copyrights <a href="#">akkhor</a> 2019. All rights reserved. Designed by <a

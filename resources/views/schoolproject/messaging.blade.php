@@ -84,11 +84,11 @@
                                     <div class="row">
                                         <div class="col-12 form-group">
                                             <label>Title</label>
-                                            <input type="text" placeholder="" class="form-control">
+                                            <input type="text" placeholder="" name="title" class="form-control">
                                         </div>
                                         <div class="col-12 form-group">
-                                            <label>Recipient</label>
-                                            <input type="text" placeholder="" class="form-control">
+                                            <label>Recipient mail</label>
+                                            <input type="text" placeholder="" name="recipient_mail" class="form-control">
                                         </div>
                                         <div class="col-12 form-group">
                                             <label>Message</label>
@@ -107,7 +107,7 @@
                     <!-- Add Notice Area End Here -->
                     <!-- All Notice Area Start Here -->
                     <div class="col-xl-4">
-                        <div class="card message-box-wrap height-auto">
+                        .<div class="card message-box-wrap height-auto">
                             <div class="card-body">
                                 <div class="heading-layout1">
                                     <div class="item-title">
@@ -133,8 +133,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card message-box-wrap height-auto">
+                        .</div>
+                        {{-- <div class="card message-box-wrap height-auto">
                             <div class="card-body">
                                 <div class="heading-layout1">
                                     <div class="item-title">
@@ -150,17 +150,17 @@
                                             <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="message-error-box">
+                                </div> --}}
+                                {{-- <div class="message-error-box">
                                     <div class="item-content">
                                         <div class="item-icon">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </div>
                                         <h3 class="item-title">Some Field Requierd Here</h3>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                </div> --}}
+                            {{-- </div>
+                        </div> --}}
                     </div>
                     <!-- All Notice Area End Here -->
                 </div>

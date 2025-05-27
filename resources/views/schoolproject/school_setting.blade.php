@@ -114,12 +114,12 @@
                                         
                                         <label class="camera-icon-label">
                                         {{-- <label>School Logo</label> --}}
-                                            <input type="file" class="image_file" name="file_upload" accept="image/*">
+                                            <input type="file" required class="image_file" name="file_upload" accept="image/*">
                                             <i class="camera-icon">📷</i> <!-- This is where the camera logo goes -->
                                           </label>
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
                                             <label>School Name</label>
-                                            <input type="text" value="" name="SchoolName" placeholder="" class="form-control">
+                                            <input type="text"  value="" name="SchoolName" placeholder="" class="form-control">
                                         </div>
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
                                             <label>School Motto</label>
@@ -133,6 +133,18 @@
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
                                             <label>School Location</label>
                                             <input type="text" id="location-input" name="SchoolLocation" placeholder="" class="form-control">
+                                        </div> 
+                                        <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                            <label>School Phone-number</label>
+                                            <input type="text" id="location-input" name="SchoolPhone" placeholder="" class="form-control">
+                                        </div> 
+                                        <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                            <label>School E-mail</label>
+                                            <input type="text" id="location-input" name="SchoolMail" placeholder="" class="form-control">
+                                        </div> 
+                                        <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                            <label>P.O BOX</label>
+                                            <input type="text" id="location-input" name="SchoolBox" placeholder="" class="form-control">
                                         </div> 
                                         <div class="col-12 form-group mg-t-8">
                                             <button type="submit" id="button"

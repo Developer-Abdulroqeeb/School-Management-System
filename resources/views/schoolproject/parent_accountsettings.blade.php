@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
  
-                                <form class="new-added-form" method="POST" enctype="multipart/form-data" action="{{route("schoolproject.parenteditprofile", $parent->id)}}">
+                                <form class="new-added-form" id="form" method="POST" enctype="multipart/form-data" action="{{route("schoolproject.parenteditprofile", $parent->id)}}">
                                     @method("PUT")
                                     @csrf
                                     @if (empty( $parent->profileImage))
@@ -119,7 +119,7 @@
                                           </label>
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
                                             <label>Old Password *</label>
-                                            <input type="text" value="" name="old_password" placeholder="" class="form-control">
+                                            <input type="password" value="" name="old_password" placeholder="" class="form-control">
                                         </div>
                                         @if($errors->any())
                                         <p style="color:red;">{{ $errors->first() }}</p>
@@ -128,10 +128,12 @@
                                             <label>New Password*</label>
                                             <input type="password" id="newpassword" name="new_password" placeholder="" class="form-control">
                                         </div> 
+                                        <p style="color: red;" id="message"></p>
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
                                             <label>Confirm Password *</label>
                                             <input type="password" id="cpassword" name="confirm_password"  class="form-control">
                                             {{-- <i class="far fa-calendar-alt"></i> --}}
+                                            
                                             <p id="error"></p>
                                         </div>
                                  
@@ -183,14 +185,27 @@ const newpassword = document.getElementById("newpassword");
 const cpassword = document.getElementById("cpassword");
 const btn = document.getElementById("button");
 const error = document.getElementById("error");
+const form = document.getElementById("form");
+const message = document.getElementById("message");
 cpassword.addEventListener("input", function(e){
     if(newpassword.value === cpassword.value){
         btn.disabled = false;
         error.textContent = "Password  match";
+        error.style.color = "green";
     }else{
         btn.disabled = true;
         error.textContent = "Password does not match";
+        error.style.color = "red";
+
     }
+});
+
+form.addEventListener("submit", function(e){
+if(newpassword.value.length <8){
+    message.textContent = "password must have a minimum value of 8";
+    
+    e.preventDefault();
+}
 });
    </script>
 </body>

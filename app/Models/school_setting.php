@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class school_setting extends Model
 {
     use HasFactory;
-    public $fillable = ['SchoolName','SchoolImage','SchoolMotto','SchoolLocation','SchoolAbr'];
+    public $fillable = ['SchoolName','SchoolImage','SchoolMotto','SchoolLocation','SchoolAbr',"SchoolMail","SchoolBox","SchoolPhone"];
 }

@@ -28,7 +28,9 @@
     <link rel="stylesheet" href="{{asset("css/style.css")}}">
     <!-- Modernize js -->
     <script src="/js/modernizr-3.6.0.min.js"></script>
+<style>
 
+</style>
 </head>
 
 <body>
@@ -38,32 +40,7 @@
     <div id="wrapper" class="wrapper bg-ash">
         <!-- Header Menu Area Start Here -->
         <div class="navbar navbar-expand-md header-menu-one bg-light">
-            @include('schoolproject.parentnavbar')  
-{{-- <div class="nav-bar-header-one">
-                    <div class="header-logo">
-                        <a href="index.html">
-                            <img src="{{asset ('img/logo.png')}}" alt="logo">
-                        </a>
-                    </div>
-                     <div class="toggle-button sidebar-toggle">
-                        <button type="button" class="item-link">
-                            <span class="btn-icon-wrap">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </span>
-                        </button>  Y8I
-                    </div>
-                </div> --}}
-                <div class="d-md-none mobile-nav-bar">
-                   <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false">
-                        <i class="far fa-arrow-alt-circle-down"></i>
-                    </button>
-                    <button type="button" class="navbar-toggler sidebar-toggle-mobile">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-        
+            @include('schoolproject.parentnavbar') 
         </div>
         <!-- Header Menu Area End Here -->
         <!-- Page Area Start Here -->
@@ -168,17 +145,17 @@
                                     </div>
                  
                                 </div>
-                                  @foreach ($student as $children)
-                                <div class="kids-details-wrap">
-                                  
+                                 
+                                <div class="kids-details-wrap"  style="">
 
                                     <div class="row">
+                                     @foreach ($student as $children)
                                         <div class="col-12-xxxl col-xl-6 col-12">
                                             <div class="kids-details-box mb-5">
                                                 <div class="item-img">
                                                     <img src="img/figure/student.png" alt="kids">
                                                 </div>
-                                                <div class="item-content table-responsive">
+                                                <div class="item-content table-responsive" >
                                                     <table class="table text-nowrap">
                                                         <tbody>
                                                             <tr>
@@ -212,11 +189,11 @@
                                                 </div>
                                             </div>
                                         </div>
-
+  @endforeach 
                                     </div>
                                   
                                 </div>
-                                 @endforeach
+                              
                             </div>
                         </div>
                     </div>

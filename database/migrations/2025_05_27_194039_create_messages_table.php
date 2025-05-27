@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('school_settings', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->string("SchoolName");
-            $table->string("SchoolImage");
-            $table->string("SchoolMotto");
-            $table->string("SchoolLocation");
-            $table->string("SchoolAbr");
-            $table->string("SchoolPhone");
-            $table->string("SchoolBox");
-            $table->string("SchoolMail");
+            $table->string("sender_mail");
+            $table->string("receiver_mail");
+            $table->string("title");
+            $table->string("message");
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('school_settings');
+        Schema::dropIfExists('messages');
     }
 };

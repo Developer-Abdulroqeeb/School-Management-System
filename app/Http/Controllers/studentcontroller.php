@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\notice;
 use App\Models\student;
 use App\Models\studentclass;
@@ -17,10 +18,17 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use DB;
+use Illuminate\Validation\Rules\Unique;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use function PHPUnit\Framework\returnArgument;
 class studentcontroller extends Controller
 {
+  // public function emailtest(Request $request){
+  //  $mail = Mail::to("hammedlawal09@gmail.com")->send(new WelcomeMail());
+  //  if($mail){
+  //   return 'sent';
+  //  }
+  // }
   //  admin acccount setting
 Public function adminaccount_settings(Request $request){
     return view("schoolproject.adminaccount_settings");
@@ -164,36 +172,41 @@ $subjectclass = array_combine($classesi, $classesi);
 
 // insert studdnt info
 public function student_form(Request $request){
-
+$parentID = $request->parent_id;
   // $rand = mt_rand( 100,1000);
-  $date = date("Y-m-d");
-  $random = mt_rand(1,1000);
-   $insert = DB::table('student-information')->insert(values: [
-     "FirstName" => $request->FirstName,
-     "LastName"=>$request->LastName,
-     "Gender"=>$request->Gender,
-     "DateOfBirth"=>$request->DateOfBirth,
-     "class"=>$request->class,
-     "Phone"=>$request->Phone,
-     "ShortBIO"=>$request->ShortBIO,
-     "religion"=>$request->religion,
-     "blood"=>$request->blood,
-     "email"=>$request->email,
-     "address"=>$request->address,
-     "password"=> $request->FirstName.$random,
-      "username"=> $request->LastName,
-      "OtherName"=>$request->OtherName,
-      "year_admitted" =>$request->$date,
-      "housing_mode" =>$request->housing_mode,
-       "hostel" =>$request->hostel,
-       "transport"=>$request->transport,
-       "room_number" =>$request->room_number,
-       "session" =>$request->session,
-       "term" =>$request->term,
-       "parent_id" =>$request->parent_id
-    ]);
-    return redirect()->route("schoolproject.admit_form");
-}
+
+    $getparent = DB::table("studentparents")->where("id",$parentID)->first();
+    $mail = Mail::to($getparent->email)->send(new WelcomeMail($getparent));
+      if($mail){
+        $date = date("Y-m-d");
+        $random = mt_rand(1,1000);
+         $insert = DB::table('student-information')->insert(values: [
+           "FirstName" => $request->FirstName,
+           "LastName"=>$request->LastName,
+           "Gender"=>$request->Gender,
+           "DateOfBirth"=>$request->DateOfBirth,
+           "class"=>$request->class,
+           "Phone"=>$request->Phone,
+           "ShortBIO"=>$request->ShortBIO,
+           "religion"=>$request->religion,
+           "blood"=>$request->blood,
+           "email"=>$request->email,
+           "address"=>$request->address,
+           "password"=> $request->FirstName.$random,
+            "username"=> $request->LastName,
+            "OtherName"=>$request->OtherName,
+            "year_admitted" =>$request->$date,
+            "housing_mode" =>$request->housing_mode,
+             "hostel" =>$request->hostel,
+             "transport"=>$request->transport,
+             "room_number" =>$request->room_number,
+             "session" =>$request->session,
+             "term" =>$request->term,
+             "parent_id" =>$request->parent_id
+          ]);
+        return redirect()->route("schoolproject.admit_form");
+      }
+    }
 //   get all student <details></details>
   public function all_student(Request $request){
    $students = DB::table('student-information')->get();
@@ -223,11 +236,11 @@ public function add_teacher(Request $request){
 //    view student details
   public function student_details(Request $request, $id){
  
-    $students  = DB::table('student-information')
+    $student  = DB::table('student-information')
     ->join('studentparents', 'studentparents.id', '=', 'student-information.parent_id')
     ->select('student-information.*','studentparents.*','studentparents.phone as phonenumber','studentparents.Surname as parentname')
-    ->get();
-      return view('schoolproject.student_details', compact('students'));
+    ->first();
+      return view('schoolproject.student_details', compact('student'));
 
   }
 
@@ -873,7 +886,7 @@ public function each_class_bills(Request $request){
   }
   // parent expense
   public function parentexpenses(Request $request){
-    $parent_id = Session::get("parent_id");
+    $parent_id = Session::get(key: "parent_id");
     $student = DB::table("student-information")->where("parent_id", $parent_id)->get();
     return view("schoolproject.parentexpenses", compact("student"));
   }
@@ -919,7 +932,44 @@ public function each_class_bills(Request $request){
     ->get();
     return view("schoolproject.parent_result", compact("getChild", "class","academic"));
   }
+  public function parentviewresult(Request $request){
+    return view("schoolproject.parentviewresult");
+  }
+  public function checkresultform(Request $request){
+    $child_id = $request->child_id;
+    $class = $request->class;
+    $term = $request->term;
+    $session = $request->session;
 
+    $query = DB::table("results")
+    ->where([
+      "studentId" =>$child_id,
+       "class" => $class,
+        "term" => $term,
+        "session" => $session
+     ])
+     ->get();
+     $count = DB::table("results")
+     ->where([
+       "studentId" =>$child_id,
+        "class" => $class,
+         "term" => $term,
+         "session" => $session
+      ])
+      ->count();
+      $aggregate = DB::table("results")
+      ->where([
+        "studentId" =>$child_id,
+         "class" => $class,
+          "term" => $term,
+          "session" => $session
+       ])
+       ->sum('aggregate');
+      $total = $count*100;
+      $pecentage = $aggregate/$total *100;
+     return view("schoolproject.parentviewresult", compact("query","count","aggregate"));
+
+  }
   public function parentprofile(Request $request){
     $parent_id = Session::get("parent_id");
     $profile = DB::table("studentparents")->where("id", $parent_id)->first();
@@ -1033,26 +1083,39 @@ public function addresult(Request $request,$id){
     "term" =>   $termName,
     "session" => $session
   ])->get();
-  // return $termName;
+
   return view("schoolproject.addresult", compact("studentName","subject"));
 }
 public function resultform(Request $request){
-  $count = count($request->subject);
-  for ($i = 0; $i < $count; $i++) {
-  $insert = Db::table("results")->insert(values:[
-      "studentId" => $request->studentId[$i],
-      "class" => $request->class[$i],
-      "subject" => $request->subject[$i],
-      "term" => $request->term[$i],
-      "session" => $request->session[$i],
-      "test" => $request->test[$i],
-      "exam" => $request->exam[$i],
-      "aggregate" => $request->exam[$i] + $request->test[$i]
-  ]);
-}
-  return redirect()->route("schoolproject.teacherdashboard")
-  ->with('success', 'Results submitted successfully.');
+  $studentId = $request->studentId;
+  $term = $request->term;
+  $session = $request->session;
+  $checkStudent = DB::table("results")
+  ->where([
+    "studentId"=> $studentId,
+    "term" => $term,
+    "session" => $session
+  ])->exists();
 
+  if($checkStudent){
+    return back()->withErrors(['studentId' => 'Already add result for this student for this term and session']);
+  }else{
+    $count = count($request->subject);
+    for ($i = 0; $i < $count; $i++) {
+    $insert = Db::table("results")->insert(values:[
+        "studentId" => $request->studentId[$i],
+        "class" => $request->class[$i],
+        "subject" => $request->subject[$i],
+        "term" => $request->term[$i],
+        "session" => $request->session[$i],
+        "test" => $request->test[$i],
+        "exam" => $request->exam[$i],
+        "aggregate" => $request->exam[$i] + $request->test[$i]
+    ]);
+  }
+    return redirect()->route("schoolproject.teacherdashboard")
+    ->with('success', 'Results submitted successfully.');
+  }
 }
 public function school_setting(Request $request){
   $select = DB::table("school_settings")->where("id",1)->first();
@@ -1070,7 +1133,10 @@ $insert = DB::table("school_settings")->insert(values:[
 "SchoolImage" =>$path,
 "SchoolMotto" =>$request->SchoolMotto,
 "SchoolLocation" =>$request->SchoolLocation,
-"SchoolAbr" =>$request->SchoolAbr
+"SchoolAbr" =>$request->SchoolAbr,
+"SchoolPhone" => $request->SchoolPhone,
+"SchoolBox" =>$request->SchoolBox,
+"SchoolMail" => $request->SchoolMail
 ]);
   return redirect()->route(route: "schoolproject.school_setting");
 }
@@ -1095,6 +1161,11 @@ public function promoteForm(Request $request){
   ]);
   return redirect()->route("schoolproject.promoteStudent");
 }
+
+
+
+
+
 }
 
 

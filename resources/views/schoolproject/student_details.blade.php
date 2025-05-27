@@ -90,7 +90,7 @@
                                 <div class="info-table table-responsive">
                                     <table class="table text-nowrap">
                                         <tbody>
-   @foreach($students as $student)
+   {{-- @foreach($students as $student) --}}
                                             <tr>
                                                 <td>Name:</td>
                                                 <td class="font-medium text-dark-medium">{{$student->FirstName}}</td>
@@ -163,7 +163,7 @@
                                                 <td>Parent Number</td>
                                                 <td class="font-medium text-dark-medium">{{$student->phonenumber}}</td>
                                             </tr>
-                                            @endforeach
+                                            {{-- @endforeach --}}
                                         </tbody>
                                     </table>
                                 </div>

@@ -24,14 +24,14 @@
                         </button>
                     </div>
                 </div>
-                <div class="d-md-none mobile-nav-bar">
+                {{-- <div class="d-md-none mobile-nav-bar">
                    <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false">
                         <i class="far fa-arrow-alt-circle-down"></i>
                     </button>
                     <button type="button" class="navbar-toggler sidebar-toggle-mobile">
                         <i class="fas fa-bars"></i>
                     </button>
-                </div>
+                </div> --}}
                 <div class="header-main-menu collapse navbar-collapse" id="mobile-navbar">
                     <ul class="navbar-nav">
                         <li class="navbar-item header-search-bar">

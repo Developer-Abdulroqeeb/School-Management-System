@@ -92,6 +92,9 @@
                                         </div>
                                     </div>
                                 </form>
+                                @if($errors->any())
+                                <p style="color:red;">{{ $errors->first() }}</p>
+                            @endif
                                 <div class="table-responsive">
                                         <form action="{{route("schoolproject.resultform")}}" method="POST">
                                                             @csrf
