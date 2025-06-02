@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 use App\Mail\WelcomeMail;
+use App\Models\message;
 use Illuminate\Support\Facades\Mail;
 use App\Models\notice;
 use App\Models\student;
 use App\Models\studentclass;
 use App\Models\schoolfee;
+use App\Models\receipt;
 use App\Models\subject;
 use App\Models\Teacher;
 use App\Models\studentparent;
 use App\Models\transport;
 use App\Models\academicsession;
+use App\Models\payment_history;
 use App\Models\library;
 use Illuminate\Support\Facades\Auth; 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+
 use DB;
 use Illuminate\Validation\Rules\Unique;
 use Symfony\Component\HttpKernel\Profiler\Profile;
@@ -35,7 +39,10 @@ Public function adminaccount_settings(Request $request){
 }
 // messageing from admin
 public function messaging(Request $request){
-  return view("schoolproject.messaging");
+  $adminMail = DB::table("school_settings")->where("adminId", Session::get("admin_id"))->first();
+  $SentMail = DB::table("messages")->where("sender_mail",$adminMail->SchoolMail)->get();
+  $InboxMail = DB::table("messages")->where("receiver_mail",$adminMail->SchoolMail)->get();
+  return view("schoolproject.messaging", compact("adminMail","SentMail","InboxMail"));
 }
 // mapping
 public function map(Request $request){
@@ -53,7 +60,7 @@ public function forgotform(Request $request){
   $checkAdmin = DB::table("admins")->where("username", $username)->first();
   $checkParent = DB::table("studentparents")->where("username", $username)->first();
   $checkTeacher = DB::table("teachers")->where("username", $username)->first();
-  $checkStudent = DB::table("student-information")->where("username", $username)->first();
+  $checkStudent = DB::table( "student-information")->where("username", $username)->first();
   if($checkAdmin && $checkAdmin->username === $username){
     Session::put('username',   $checkAdmin->username);
     Session::put('userId',   $checkAdmin->id);
@@ -451,14 +458,7 @@ public function existingParent(Request $request){
   $password = $selectParent->password;
   $surname = $selectParent->Surname;
   $othername = $selectParent->OtherName;
-  $insertNEWParent = DB::table("studentparents")->insert(values:[
-   "username" => $username,
-   "password" => $password,
-   "Surname" =>$surname,
-   "OtherName" =>$othername,
-   "existing_parent" => $ParentId,
-   "child_name" => $Newchild
-  ]);
+
   return redirect()->route("schoolproject.addparents");
 }
 
@@ -557,13 +557,12 @@ public function loginform(Request $request) {
       Session::put('username', $parent->username);
     
       
-      return redirect()->route("schoolproject.parentdashboard");
+      return redirect()->route("schoolproject.parentdash");
     }
     $admin = DB::table("admins")->where('username',$username)->first();
     if($admin  && $admin->password === $password){
       Session::put('admin_id', $admin->id);
       Session::put('username', $admin->username);
-
       return redirect()->route("schoolproject.dashboard");
     }
 
@@ -592,12 +591,11 @@ public function studentdashboard(Request $request){
         ->pluck('session')
         ->unique();
 
-  $totalExpenses = schoolfee::whereIn('class', $class)
-        ->where( [
-          'term' =>$term,
-          'session'=> $session
-          ])
-        ->sum('amount');
+        $totalExpenses = schoolfee::whereIn('class', $class)
+    ->whereIn('term', $term)
+    ->whereIn('session', $session)
+    ->sum('amount');
+
   return view("schoolproject.parentdash", 
   compact("parent","student","notice_count","class","term","session","totalExpenses"));
  }
@@ -909,7 +907,7 @@ public function each_class_bills(Request $request){
         "class" => $class,
         "session" => $session,
         "term" => $term
-        ])->select('class','session','term')->distinct()->get();
+        ])->select('class','session','term','account_number','account_name','bank_name')->distinct()->get();
 
         $total =  DB::table("schoolfees")->where([
           'class' => $class,
@@ -965,8 +963,8 @@ public function each_class_bills(Request $request){
           "session" => $session
        ])
        ->sum('aggregate');
-      $total = $count*100;
-      $pecentage = $aggregate/$total *100;
+      // $total = $count*100;
+      // $pecentage = $aggregate/$total *100;
      return view("schoolproject.parentviewresult", compact("query","count","aggregate"));
 
   }
@@ -1118,16 +1116,21 @@ public function resultform(Request $request){
   }
 }
 public function school_setting(Request $request){
+  $adminId = Session::get("admin_id");
   $select = DB::table("school_settings")->where("id",1)->first();
   return view("schoolproject.school_setting", compact("select"));
 }
 public function schoolSetForm(Request $request){
-  
-  if ($request->hasFile('file_upload')) {
-    $image = $request->file(key: 'file_upload');
-    $path = $image->store('uploads','public');
+  $adminId = Session::get("admin_id");
+  $check = DB::table("school_settings")->where("adminId", $adminId)->first();
+
+    if ($request->hasFile('file_upload')) {
+      $image = $request->file( 'file_upload');
+      $path = $image->store('uploads','public');
+      }else {
+        $path = $check->SchoolImage; // Keep old image if no new upload
     }
-$insert = DB::table("school_settings")->insert(values:[
+$update = DB::table("school_settings")->update([
 
 "SchoolName" =>$request->SchoolName,
 "SchoolImage" =>$path,
@@ -1138,7 +1141,7 @@ $insert = DB::table("school_settings")->insert(values:[
 "SchoolBox" =>$request->SchoolBox,
 "SchoolMail" => $request->SchoolMail
 ]);
-  return redirect()->route(route: "schoolproject.school_setting");
+return redirect()->back()->with('showModal', true);
 }
 
 public function promoteStudent(Request $request){
@@ -1161,11 +1164,108 @@ public function promoteForm(Request $request){
   ]);
   return redirect()->route("schoolproject.promoteStudent");
 }
+public function AdminsendMessage(Request $request){
+  $insert = message::create($request->all());
+  return redirect()->back()->with('showModal', true);
+}
+public function all_fees(Request $request){
+  return view("schoolproject.all_fees");
+}
+public function addpayment(Request $request){
+  $class = DB::table("studentclasses")->get();
+  $sch_session =  DB::table("academicsessions")
+  ->select("academic_session")
+  ->distinct()
+  ->get();
+   return view("schoolproject.addpayment", compact("class","sch_session"));
+}
+public function paymentform(Request $request){
+  $class = $request->class;
+  $session = $request->session;
+  $term = $request->term;
+  $query = schoolfee::where([
+   "class" => $class,
+   "term" => $term,
+   "session" => $session
+  ])->get();
+  $getChild = DB::table("student-information")->where([
+    "class" => $class,
+    "term" => $term,
+    "session" => $session
+  ])->get();
 
+  return view("schoolproject.makePayment", compact("getChild","query"));
+}
+public function payexpenses(Request $request){
+  $insert = payment_history::create($request->all());
+  return redirect()->route('schoolproject.addpayment')->with('showModal', true);
+}
+public function makePayment(Request $request){
 
+  return view("schoolproject.makePayment");
+}
+public function selectChildPayment(Request $request){
+    $parent_id = Session::get(key: "parent_id");
+    $student = DB::table("student-information")->where("parent_id", $parent_id)->get();
+    return view("schoolproject.selectChildPayment", compact("student"));
+}
+public function sendproof($id){
+  $student = DB::table("student-information")->where("id", $id)->first();
+  $term = $student->term;
+  $session = $student->session;
+  $class = $student->class;
+  $selectExpense = schoolfee::where([
+  "term" => $term,
+  "session" => $session,
+  "class" => $class
+  ])->get();
+  return view("schoolproject.sendproof", compact("student","selectExpense"));
+}
+public function sendproofform(Request $request){
+  // $parentId = Session::get("parent_id");
+  if ($request->hasFile('file_upload')) {
+    $image = $request->file(  key: 'file_upload');
+    $path = $image->store('uploads','public');
+    }
+$insert = receipt::create([
+  "parent_id" =>$request->parent_id,
+  "child_id" =>$request->child_name,
+  "term" =>$request->term,
+  "class" =>$request->class,
+  "amount"=>$request->amount,
+  "session" =>$request->session,
+  "receipt_image" =>$path,
+  "description" =>$request->description,
+  "status" => $request->status,
+  "payment_for" => $request->payment_for
+]);
+return redirect()->route("schoolproject.parentdash")->with("showModal", true);
+}
 
+public function parentpaymentstatus(Request $request){
+  $pay_history = receipt::where("parent_id", Session::get("parent_id"))->get();
+  $query =  DB::table("receipts")
+  ->where("parent_id", Session::get("parent_id"))
+  ->select("child_id","class","term","session","payment_for")
+  ->distinct()
+  ->sum("amount");
+  // $expense = DB::table("schoolfees")->where("id", $pay_history->payment_for)->get();
+  return view("schoolproject.parentpaymentstatus", compact("pay_history","query"));
+}
+// pendin payments 
+public function pendingpayment(Request $request){
+  $pendingpayment = receipt::where("status", "PENDING")->get();
+  return view("schoolproject.pendingpayment", compact("pendingpayment")  );
+}
+// declineform
+public function declineform(Request $request){
+  $declineId = $request->decline_id;
+  $decline = receipt::where("id", $declineId)->update([
+ "status" =>"DECLINED"
+  ]);
+  return redirect()->route("schoolproject.pendingpayment")->with("showModal", true);
 
-
+}
 }
 
 

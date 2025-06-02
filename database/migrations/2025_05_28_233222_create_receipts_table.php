@@ -13,17 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schoolfees', function (Blueprint $table) {
+        Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->string("amount");
-            $table->string("class");
-            $table->string("session");
+            $table->string("parent_id");
+            $table->string("child_id");
+            $table->string("receipt_image");
+            $table->string("payment_for");
             $table->string("term");
-            $table->string("account_number");
-            $table->string("account_name");
-            $table->string("bank_name");
-            $table->string("package_type");
-            // $table->string();
+            $table->string("session");
+            $table->string("class");
+            $table->string("amount");
+            $table->string("status");
+            $table->string("description");           
             $table->timestamps();
         });
     }
@@ -35,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schoolfees');
+        Schema::dropIfExists('receipts');
     }
 };

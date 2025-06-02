@@ -78,7 +78,7 @@
                             <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Account</span></a>
                             <ul class="nav sub-group-menu">
                                 <li class="nav-item">
-                                    <a href="all-fees.html" class="nav-link"><i class="fas fa-angle-right"></i>All Fees Collection</a>
+                                    <a href="{{route("schoolproject.all_fees")}}" class="nav-link"><i class="fas fa-angle-right"></i>All Fees Collection</a>
                                 </li>
                                 {{-- <li class="nav-item">
                                     <a href="{{route("schoolproject.allexpense")}}" class="nav-link"><i class="fas fa-angle-right"></i>Expenses</a>
@@ -123,6 +123,20 @@
                                 <li class="nav-item">
                                     <a href="{{route("schoolproject.exam_grade")}}" class="nav-link"><i class="fas fa-angle-right"></i>Exam Grades</a>
                                 </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item sidebar-nav-item">
+                            <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Payment</span></a>
+                            <ul class="nav sub-group-menu">
+                                <li class="nav-item">
+                                    <a href="{{route("schoolproject.pendingpayment")}}" class="nav-link"><i class="fas fa-angle-right"></i>Pending Payment</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route("schoolproject.approvepayment")}}" class="nav-link"><i class="fas fa-angle-right"></i>Approved Payment</a>
+                                </li>
+                                   {{-- <li class="nav-item">
+                                    <a href="{{route("schoolproject.addpayment")}}" class="nav-link"><i class="fas fa-angle-right"></i>0Payment Fee</a>
+                                </li> --}}
                             </ul>
                         </li>
                         <li class="nav-item">

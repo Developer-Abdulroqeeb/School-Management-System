@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AKKHOR | Expenses</title>
+    <title>AKKHOR | Make Payment</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -64,7 +64,7 @@
                         <li>
                             <a href="index.html">Home</a>
                         </li>
-                        <li>Expenses</li>
+                        <li>Payments</li>
                     </ul>
                 </div>
                 
@@ -73,7 +73,7 @@
                             <div class="card-body">
                                 <div class="heading-layout1">
                                     <div class="item-title">
-                                        <h3>Check Expenses</h3>
+                                        <h3>Select Child</h3>
                                     </div>
                                 </div>
                                 <div class="table-box-wrap">
@@ -95,7 +95,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>
-                                                 S/N
+                                                     S/N
                                                     </th>
                                                     <th>Child Name</th>
                                                     <th>Class</th>
@@ -109,7 +109,9 @@
                                             <tbody>
                                @foreach ($student as $students)
                                                 <tr>
-                                                    <td>{{$loop->iteration}}</td>
+                                                    <td>
+                                                        {{$loop->iteration}}
+                                                    </td>
                                                     <td>{{$students->FirstName}} {{$students->LastName}} {{$students->OtherName}}</td>
                                                     <td>{{$students->class}}</td>
                                                     <td>{{$students->session}}</td>
@@ -117,14 +119,11 @@
                                                
                                                     <td>
                                                         <div class="dropdown">
-                                                            <form  method="POST" action="{{route("schoolproject.viewexpenseform")}}" >
-                                                                @csrf
-                                                                <input type="hidden" value="{{$students->class}}" name="class">
-                                                                <input type="hidden" value="{{$students->session}}" name="session">
-                                                                <input type="hidden" value="{{$students->term}}" name="term">
-                                                            <button type="submit" name="submit"  class="dropdown-item">View <i
-                                                                class="fas fa-eye text-orange-red"></i> </button>
-                                                            </form> 
+                                                     
+                                                            
+                                                            <a href="{{route("schoolproject.sendproof", $students->id)}}" class="dropdown-item">Continue <i
+                                                                class="fas fa-eye text-orange-red"></i> </a>
+                                                         
                                                         </div>
                                                     </td>
                                                 </tr>

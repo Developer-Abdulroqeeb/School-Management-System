@@ -89,7 +89,7 @@ Route::match(['get', 'post'], 'subjectform/', [StudentController::class, 'subjec
 Route::get("uploadresult/", [studentcontroller::class, "uploadresult"])->name("schoolproject.uploadresult");
 Route::get("classSubject/", [studentcontroller::class, "classSubject"])->name("schoolproject.classSubject");
 Route::post("resultform/", [studentcontroller::class, "resultform"])->name("schoolproject.resultform");
-Route::post("schoolSetForm/", [studentcontroller::class, "schoolSetForm"])->name("schoolproject.schoolSetForm");
+Route::put("schoolSetForm/", [studentcontroller::class, "schoolSetForm"])->name("schoolproject.schoolSetForm");
 Route::get("promoteStudent/",  [studentcontroller::class, "promoteStudent"])->name("schoolproject.promoteStudent");
 Route::get("makePromotion/{class}",  [studentcontroller::class, "makePromotion"])->name("schoolproject.makePromotion");
 Route::put("promoteForm/", [studentcontroller::class, "promoteForm"])->name("schoolproject.promoteForm");
@@ -104,8 +104,20 @@ Route::get("parent_accountsettings/{id}", [studentcontroller::class, "parent_acc
 Route::put("parenteditprofile/{id}", [studentcontroller::class, "parenteditprofile"])->name("schoolproject.parenteditprofile");
 Route::get("parentviewresult/", [studentcontroller::class, "parentviewresult"])->name("schoolproject.parentviewresult");
 Route::post("checkresultform", [studentcontroller::class, "checkresultform"])->name("schoolproject.checkresultform");
+Route::post("AdminsendMessage", [studentcontroller::class, "AdminsendMessage"])->name("schoolproject.AdminsendMessage");
+Route::post("paymentform", [studentcontroller::class, "paymentform"])->name("schoolproject.paymentform");
+Route::get("sendproof/{id}", [studentcontroller::class, "sendproof"])->name("schoolproject.sendproof");
+Route::post("sendproofform/", [studentcontroller::class, "sendproofform"])->name("schoolproject.sendproofform");
+Route::get("approvepayment", [studentcontroller::class,"approvepayment"])->name("schoolproject.approvepayment");
+Route::get("pendingpayment", [studentcontroller::class, "pendingpayment"])->name("schoolproject.pendingpayment");
+Route::put("declineform", [studentcontroller::class, "declineform"])->name("schoolproject.declineform");
 // });
-
+Route::get("parentpaymentstatus/", [studentcontroller::class, "parentpaymentstatus"])->name("schoolproject.parentpaymentstatus");
+Route::get("select-child", [studentcontroller::class, "selectChildPayment"])->name("schoolproject.selectChildPayment");
+Route::post("payexpenses", [studentcontroller::class, "payexpenses"])->name("schoolproject.payexpenses");
+Route::get("makePayment/", [studentcontroller::class, "makePayment"])->name("schoolproject.makePayment");
+Route::get("all-fees", [studentcontroller::class, "all_fees"])->name("schoolproject.all_fees");
+Route::get("addpayment", [studentcontroller::class, "addpayment"])->name("schoolproject.addpayment");
 Route::get("forgot-password/", [studentcontroller::class, "forgotpassword"])->name("schoolproject.forgotpassword");
 Route::post("forgotform/", [studentcontroller::class, "forgotform"])->name("schoolproject.forgotform");
 Route::get("change-password/", [studentcontroller::class, "changepassword"])->name("schoolproject.changepassword");

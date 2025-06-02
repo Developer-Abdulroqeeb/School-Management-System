@@ -101,8 +101,23 @@
                                         <h3>Upload School Logo</h3>
                                     </div>
                                 </div>
- 
+                                {{-- modal --}}
+                                <div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="thankYouModalLabel">Success</h5>
+                                          {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button> --}}
+                                        </div>
+                                        <div class="modal-body">
+                                          Your data has been Updatted!
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                           
                                 <form class="new-added-form" method="POST" action="{{route("schoolproject.schoolSetForm")}}" enctype="multipart/form-data" >
+                                   @method("PUT")
                                     @csrf
                                 @if (empty( $select->SchoolImage))
                                 <img src="{{asset("img/figure/admin.jpg")}}" class="image_pick" alt="a">
@@ -114,7 +129,7 @@
                                         
                                         <label class="camera-icon-label">
                                         {{-- <label>School Logo</label> --}}
-                                            <input type="file" required class="image_file" name="file_upload" accept="image/*">
+                                            <input type="file"  class="image_file" name="file_upload" accept="image/*">
                                             <i class="camera-icon">📷</i> <!-- This is where the camera logo goes -->
                                           </label>
                                         <div class="col-xl-3 col-lg-6 col-12 form-group">
@@ -148,7 +163,7 @@
                                         </div> 
                                         <div class="col-12 form-group mg-t-8">
                                             <button type="submit" id="button"
-                                             class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                                             class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Update</button>
                                             {{-- <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button> --}}
                                         </div>
                                     </div>
@@ -167,6 +182,15 @@
         </div>
         <!-- Page Area End Here -->
     </div>
+    @if(session('showModal'))
+    <script>
+        window.addEventListener('load', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('thankYouModal'));
+            myModal.show();
+        });
+    </script>
+    @endif
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
         <script>
             function initializeAutocomplete() {

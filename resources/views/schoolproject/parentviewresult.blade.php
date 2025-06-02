@@ -97,20 +97,22 @@
                                         <table class="table display data-table text-nowrap">
                                             <thead>
                                                 <tr>
-                                                    {{-- <th>
-                                                        Action
-                                                    </th> --}}
+                                                    <th>
+                                                      S/N  {{-- {{$loop->iteration}} --}}
+                                                    </th>
                                                     <th>Subject</th>
                                                     <th>Class</th>
                                                             <th>Test</th>
                                                     <th>Exam</th>
                                             
                                                     <th>Total</th>
-                                                    <td>Grade</td>
+                                                    <th>Grade</th>
                                                 </tr>
-                                            </thead>
+                                          </thead>
+                                          <tbody>     
                @foreach ($query as $result)
                        <tr>
+                        <td>{{$loop->iteration}}</td>         
            <td>{{$result->subject}}</td>
            <td>{{$result->class}}</td>
            <td>{{$result->test}}</td>
@@ -119,7 +121,19 @@
               <td>
                         {{ $result->aggregate}}              
                   </td>
-                  <td> A </td>
+                  <td> 
+                    @if($result->aggregate >= 70)
+                    <p> A</p>
+                  @elseif($result->aggregate >= 60)
+                    <p> B</p>
+                        @elseif($result->aggregate >= 50)
+                   <p> C</p>
+                     @elseif($result->aggregate >= 40)
+                    <p> D</p>
+                       @else
+                          <p> F</p>
+                          @endif
+                </td>
                  </tr>                                                           
                    @endforeach
                                                 </tbody>
@@ -133,7 +147,11 @@
                                          Total Aggregate: {{ $aggregate }}/{{$count*100}}
                                         </p>
                                         @php
-                                            $percentage = ($aggregate/($count*100))*100;
+                                       if ($count > 0) {
+    $percentage = ($aggregate / ($count * 100)) * 100;
+} else {
+    $percentage = 0;
+}
                                         @endphp
                                         <p>Percentage:{{
                                           number_format($percentage,2)

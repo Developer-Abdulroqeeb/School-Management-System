@@ -126,7 +126,10 @@
                                     <label>Account Name</label>
                                     <input type="text" required placeholder="" name="account_name" class="form-control">
                                 </div>
-                                
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label>Bank Name</label>
+                                    <input type="text" required placeholder="" name="bank_name" class="form-control">
+                                </div>
                                 <div class="col-12 form-group mg-t-8">
                                     <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
                                     <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>

@@ -92,8 +92,17 @@
 <td>{{$fetch->session}}</td>
   </tr>      
   <tr>
-<td>Term:</td>
-<td>{{$fetch->term}}</td></tr>      
+<td>Account Number:</td>
+<td>{{$fetch->account_number}}</td>
+</tr>     
+<tr> 
+<td>Account Name:</td>
+<td>{{$fetch->account_name}}</td>
+</tr>    
+<tr> 
+    <td>Bank Name:</td>
+    <td>{{$fetch->bank_name}}</td>
+    </tr>    
   @endforeach
                 
    @foreach($fetch_expense as $expenses)
@@ -116,6 +125,7 @@
                                 </div>
                             </div>
                         </div>
+                     <center><button style="padding:7px; border: 1px solid rgb(12, 12, 90); background-color: rgb(12, 12, 90); border-radius: 7px;"><a href="" style="color: white">Send Teller/Receipt Image</a></button></center>   
                     </div>
                 </div>
                 <!-- Student Details Area End Here -->

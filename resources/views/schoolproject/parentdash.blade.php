@@ -197,7 +197,20 @@
                             </div>
                         </div>
                     </div>
-                  
+                                                                                  <!-- Modal -->
+<div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="thankYouModalLabel">Success</h5>
+          {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button> --}}
+        </div>
+        <div class="modal-body">
+            Payment Made Successfully
+        </div>
+      </div>
+    </div>
+  </div>
                 <footer class="footer-wrap-layout1">
                     <div class="copyright">© Copyrights <a href="#">akkhor</a> 2019. All rights reserved. Designed by <a
                             href="#">PsdBosS</a></div>
@@ -207,6 +220,15 @@
         </div>
         <!-- Page Area End Here -->
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @if(session('showModal'))
+    <script>
+        window.addEventListener('load', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('thankYouModal'));
+            myModal.show();
+        });
+    </script>
+    @endif
     <!-- jquery-->
     <script src="/js/jquery-3.3.1.min.js"></script>
     <!-- Plugins js -->
