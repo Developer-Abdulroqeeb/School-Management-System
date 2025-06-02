@@ -176,7 +176,7 @@
     <!-- Custom Js -->
     <script src="/js/main.js"></script>
     <script>
-        const image=document.querySelector(".image_pick");
+        const image= document.querySelector(".image_pick");
 const   image_file = document.querySelector(".image_file");
 image_file.addEventListener("change", ()=>{
 image.src=URL.createObjectURL(image_file.files[0]);

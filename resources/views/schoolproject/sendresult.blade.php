@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AKKHOR |Approve Payment</title>
+    <title>AKKHOR | Result Sending</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -38,7 +38,7 @@
     <div id="wrapper" class="wrapper bg-ash">
         <!-- Header Menu Area Start Here -->
         <div class="navbar navbar-expand-md header-menu-one bg-light">
-            @include('schoolproject.navigationbar')  
+            @include('schoolproject.parentnavbar')  
 
                 <div class="d-md-none mobile-nav-bar">
                    <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false">
@@ -55,44 +55,65 @@
         <div class="dashboard-page-one">
             <!-- Sidebar Area Start Here -->
             <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
-                @include("schoolproject.sidebar");
+                @include("schoolproject.parentsidebar");
              </div>
             <!-- Sidebar Area End Here -->
             <div class="dashboard-content-one">
                 <!-- Breadcubs Area Start Here -->
                 <div class="breadcrumbs-area">
-                    <h3>Enter Amount</h3>
+                    <h3>Continue</h3>
                     <ul>
                         <li>
                             <a href="index.html">Home</a>
                         </li>
-                        <li>Pay for Student</li>
+                        <li>Result</li>
                     </ul>
                 </div>
                 <!-- Breadcubs Area End Here -->
                 <!-- Dashboard summery Start Here -->
-
-                <form class="new-added-form" method="POST"  action="{{route("schoolproject.approveform")}}">
-               @method("PUT")
-                    @csrf
+                <form class="new-added-form" method="POST" action="{{route("schoolproject.sendresultform")}}">
+                @csrf
                     <div class="row" style="background: white; padding:20px;">
-   <div class="col-xl-3 col-lg-6 col-12 form-group">
-                    <label>Student Name</label>
-                    <input type="text" value="{{$select->child_id}}" readonly class="form-control" name="" id="">
+                  
+                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                    <label>Class</label>
+                    <select class="select2" required name="class" id="">
+                        @foreach ($class as $studentclass)
+                        <option value="{{ $studentclass->class}}">
+                            {{ $studentclass->class}}
+                        </option>
+                        @endforeach
+             
+                    </select>
                 </div>
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
-                    <label>Student Class</label>
-                    <input type="hidden" value="{{$select->id}}" name="feeId">
-                    <input type="text" value="{{$select->class}}" readonly class="form-control" name="class" id="">
+                    <label>Term</label>
+                    <select class="select2"  required name="term" id="">
+                        <option value="First Term">
+                            First Term
+                        </option>
+                        <option value="Second Term">
+                            Second Term
+                        </option>
+                        <option value="Third Term">
+                            Third Term
+                        </option>
+                    </select>
                 </div>
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
-                    <label>Enter Amount</label>
-                    <input type="tel" required class="form-control" name="amount" id="">
+                    <label>Session</label>
+                    <select class="select2"  required name="session" id="">
+                       @foreach ($academic as $session )
+                       <option value="{{$session->academic_session }}">
+                       {{$session->academic_session}} 
+                       </option>      
+                       @endforeach
+                    </select>
                 </div>
                 </div>
-                <button type="submit" name="submit" style="background: rgb(25, 25, 118); padding: 10px; border-radius: 10px; border: 0; color: white;">Submit</button>
+                <button type="submit" name="submit" style="background: rgb(25, 25, 118); padding: 10px; border-radius: 10px; border: 0; color: white;">Continue</button>
 
-            </form>
+                </form>
                 <footer class="footer-wrap-layout1">
                     <div class="copyright">© Copyrights <a href="#">akkhor</a> 2019. All rights reserved. Designed by <a
                             href="#">PsdBosS</a></div>
@@ -103,10 +124,7 @@
         <!-- Page Area End Here -->
     </div>
     <!-- jquery-->
-
     <script src="/js/jquery-3.3.1.min.js"></script>
-
-
     <!-- Plugins js -->
     <script src="/js/plugins.js"></script>
     <!-- Popper js -->

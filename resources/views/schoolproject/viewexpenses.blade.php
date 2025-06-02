@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{asset("css/normalize.css")}}">
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{asset("css/main.css")}}">
+    <link rel="stylesheet" href="{{asset("css/jquery.dataTables.min.css")}}">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{asset("css/bootstrap.min.css")}}">
     <!-- Fontawesome CSS -->
@@ -87,45 +89,47 @@
 <td>{{$fetch->class}}</td>
 
   </tr>
+  <td>Term:</td>
+  <td>{{$fetch->term}}</td>
+  
+    </tr>
   <tr>
 <td>Session:</td>                   
 <td>{{$fetch->session}}</td>
   </tr>      
-  <tr>
-<td>Account Number:</td>
-<td>{{$fetch->account_number}}</td>
-</tr>     
-<tr> 
-<td>Account Name:</td>
-<td>{{$fetch->account_name}}</td>
-</tr>    
-<tr> 
-    <td>Bank Name:</td>
-    <td>{{$fetch->bank_name}}</td>
-    </tr>    
-  @endforeach
-                
-   @foreach($fetch_expense as $expenses)
-                                            <tr>
-                                                <td>{{$expenses->package_type}}:</td>
-                                                <td >{{$expenses->amount}}</td>
-                                            </tr>
-                                           
-                                            {{-- <tr>
-                                                <td>Class:</td>
+  @endforeach              
 
-                                            </tr> --}}
-                                            @endforeach
-                                            <tr>
-                     <td class="font-medium text-dark-medium">Total(&#8358;):</td>
-                     <td class="font-medium text-dark-medium">{{$total}}</td>
-                                            </tr>
                                         </tbody>
+                                    </table>
+                                        <table class="table display data-table text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>S/N</th>
+                                                    <th>Expense Type</th>
+                                                    <th>Amount</th>
+                                                    <th>Account Number</th>
+                                                    <th>Account Name</th>
+                                                    <th>Bank Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($fetch_expense as $expenses)
+                                                <tr>
+                                                    <td>{{$loop->iteration}}</td>
+                                                    <td>{{$expenses->package_type}}</td>
+                                                    <td>{{$expenses->amount}}</td>
+                                                    <td>{{$expenses->account_number}}</td>
+                                                    <td>{{$expenses->account_name}}</td>
+                                                    <td>{{$expenses->bank_name}}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                            <p style="margin-top: 20px;">Total(&#8358;): <b>{{$total}}</b></p>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                     <center><button style="padding:7px; border: 1px solid rgb(12, 12, 90); background-color: rgb(12, 12, 90); border-radius: 7px;"><a href="" style="color: white">Send Teller/Receipt Image</a></button></center>   
+                     <center><button style="padding:7px; border: 1px solid rgb(12, 12, 90); background-color: rgb(12, 12, 90); border-radius: 7px;"><a href="{{route("schoolproject.selectChildPayment")}}" style="color: white">Send Teller/Receipt Image</a></button></center>   
                     </div>
                 </div>
                 <!-- Student Details Area End Here -->
@@ -148,6 +152,7 @@
     <script src="/js/jquery.scrollUp.min.js"></script>
     <!-- Custom Js -->
     <script src="/js/main.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
 
 </body>
 

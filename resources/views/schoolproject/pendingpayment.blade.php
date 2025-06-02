@@ -131,15 +131,17 @@
                                                             <img src="{{ asset("storage/".$pendings->receipt_image) }}" alt="Student Image" width="100" height="100">
                                                              </a>
                                                             </td>
-                                        <td>
+                                        <td style="display: flex; gap: 20px; align-items: center;">
                                                     <form method="POST" action="{{route("schoolproject.declineform")}}">
                                                             @method("PUT")
                                                             @csrf
                                                             <input type="hidden" value="{{$pendings->id}}" name="decline_id">
-                                                            <button type="submit" name="submit">Decline</button>
+                                                            <button type="submit" name="submit"
+                                                            style="background-color: red; border: none; color: white; padding: 10px; border-radius: 7px;">Decline</button>
                                                             </form> 
-                                                            <a href="{{route("schoolproject.approve", $pendings->id)}}">
-                                                             Approve</a>       
+                                                            <a href="{{route("schoolproject.approve", $pendings->id)}}" style="background-color: green; color: white; padding: 10px; border-radius: 7px;">
+                                                             Approve
+                                                            </a>       
                                         </td>
                                         
                                     </tr>

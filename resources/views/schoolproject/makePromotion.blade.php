@@ -102,7 +102,7 @@
                                              
                         
                                     <tr>
-                                        <td>1</td>
+                                        <td>{{$loop->iteration}}</td>
                                         <td>{{$students->FirstName}} {{$students->LastName}}</td>
                                         <td>{{$students->class}}</td>
                                     <td>    <input type="checkbox" value="{{$students->id}}" name="studentId" id=""></td>

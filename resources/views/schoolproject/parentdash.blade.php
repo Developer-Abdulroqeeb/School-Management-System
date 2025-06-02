@@ -75,7 +75,7 @@
                                 <div class="col-6">
                                     <div class="item-content">
                                         <div class="item-title">Due Fees</div>
-                                        <div class="item-number"><span>₦</i></span><span class="counter" data-num="4503">4,503</span></div>
+                                        <div class="item-number"><span>₦</i></span><span class="counter" data-num="{{$totalExpenses-$amount_paid}}">{{$totalExpenses-$amount_paid}}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -102,14 +102,14 @@
                         <div class="dashboard-summery-one">
                             <div class="row">
                                 <div class="col-6">
-                                    <div class="item-icon bg-light-yellow">
-                                        <i class="flaticon-mortarboard text-orange"></i>
+                                    <div class="item-icon bg-light-blue">
+                                        <i class="flaticon-money text-blue"></i>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="item-content">
-                                        <div class="item-title">Result</div>
-                                        <div class="item-number"><span class="counter" data-num="16">16</span></div>
+                                        <div class="item-title">Total Amount Paid</div>
+                                        <div class="item-number"><span>₦</span><span class="counter" data-num="{{$amount_paid}}">{{$amount_paid}}</span></div>
                                     </div>
                                 </div>
                             </div>

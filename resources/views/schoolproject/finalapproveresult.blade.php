@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AKKHOR | Approved Payments</title>
+    <title>AKKHOR | Principal Comment</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -29,6 +29,11 @@
     <link rel="stylesheet" href="{{asset("css/style.css")}}">
     <!-- Modernize js -->
     <script src="/js/modernizr-3.6.0.min.js"></script>
+    <style>
+        .image_pick{
+            width: 10%;
+        }
+    </style>
 </head>
 
 <body>
@@ -51,12 +56,12 @@
             <div class="dashboard-content-one">
                 <!-- Breadcubs Area Start Here -->
                 <div class="breadcrumbs-area">
-                    <h3>Payments</h3>
+                    <h3>Approve</h3>
                     <ul>
                         <li>
                             <a href="index.html">Home</a>
                         </li>
-                        <li>All Approved Payments</li>
+                        <li>All Result</li>
                     </ul>
                 </div>
                 <!-- Breadcubs Area End Here -->
@@ -65,83 +70,78 @@
                     <div class="card-body">
                         <div class="heading-layout1">
                             <div class="item-title">
-                                <h3>Approved</h3>
+                                {{-- <h3>All Students Data</h3> --}}
                             </div>
                          
                         </div>
-    <!-- Modal -->
-<div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="thankYouModalLabel">Success</h5>
-                          {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button> --}}
-                        </div>
-                        <div class="modal-body">
-                            Payment Approved 
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {{-- modal end --}}
-                        <form class="mg-b-20">
-                            <div class="row gutters-8">
-                               
-                                <div class="col-4-xxxl col-xl-3 col-lg-3 col-12 form-group">
-                                    <input type="text" name="surname" placeholder="Search by Surname ..." class="form-control">
-                                </div>
-                                <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
-                                    <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
-                                </div>
-                            </div>
-                        </form>
+                      
                         <div class="table-responsive">
+                            @foreach ($approve as $approves)
+                            @if (!empty($approves->Schoolstamp))
+                            <h1 style="color: white; background-color: green; width: 30%; text-align: center;">APPROVED</h1>
+                            @endif
+                            @endforeach
                             <table class="table display data-table text-nowrap">
                                 <thead>
                                     <tr>
                                         <th>S/N</th>
-                                        <th>Child Name</th>
-                                        <th>Expense Type</th>
-                                        <th>Session</th>
-                                        <th>Term</th>
-                                        <th>Class</th>
-                                        <th>Date Paid</th>
-                                        <th>View Receipt</th>
-                                        {{-- <th>Amount Paid</th> --}}
-                                        {{-- <th>Balance</th> --}}
-                                        <th>Status</th>
+                                        <th>subject</th>
+                                        <th>Test Score</th>
+                                        <th>Exam Score</th>
+                                        <th>Aggregate</th>
+                                        <th>Grade</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                    @foreach ($approved as $approves)
-                        @php
-                        $expense = DB::table("schoolfees")->where("id", $approves->payment_for)->first();                    
-                        @endphp                
-                   
+                                        @foreach ($select as $selects)
                                     <tr>
-                                        <td >{{$loop->iteration}}</td>
-                                        <td> {{$approves->child_id}}</td>   
-                                        <td>{{$expense->package_type}}</td>                   
-                                        <td>{{$approves->session}}</td>
-                                        <td>{{$approves->term}}</td>
-                                        <td>{{$approves->class}}</td>
-                                        <td>{{$approves->created_at}}</td>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$selects->subject}}</td>
+                                        <td>{{$selects->test}}</td>
+                                        <td>{{$selects->exam}}</td>
+                                        <td>{{$selects->aggregate}}</td>
                                         <td>
-                                                            <a href="{{ asset("storage/".$approves->receipt_image) }}" target="_blank">
-                                                            <img src="{{ asset("storage/".$approves->receipt_image) }}" alt="Student Image" width="100" height="100">
-                                                             </a>
-                                                            </td>
-                                        <td>
-                                                
-                                                            <p style="background-color: green; color: white; padding: 10px; border-radius: 7px;">
-                                                                                {{$approves->status}}
-                                                            </p>       
+                          @php
+                                      if(($selects->aggregate)>=70){
+                                        echo "A";
+                                      }elseif(($selects->aggregate)>=60){
+                                        echo "B";
+                                      }elseif(($selects->aggregate)>=50){
+                                        echo "C";
+                                      }elseif(($selects->aggregate)>=40){
+                                        echo "D";
+                                      }else{
+                                        echo "F";
+                                      }           
+                          @endphp
                                         </td>
-                                        
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            <form action="{{route("schoolproject.updateprincipalreport")}}" method="POST" enctype="multipart/form-data">
+                             @csrf
+                             @method("PUT")  
+                             @foreach ($selectDistinct as $distints)
+                           
+                             <input type="hidden" value="{{$distints->studentId}}" name="studentId">
+                             <input type="hidden" value="{{$distints->term}}" name="term">
+                             <input type="hidden" value="{{$distints->session}}" name="session">
+                             <input type="hidden" value="{{$distints->class}}"  name="class">
+                            
+<div>
+    <label for="">Add Stamp</label><br>
+    <img src="{{asset("img/figure/admin.jpg")}}" class="image_pick" alt="a">
+
+    <input type="file" accept="image/*"   name="file_upload" class="image_file">
+</div>
+                             @endforeach
+                     <div style="display: flex; flex-direction: column; width: 70%; padding:20px; gap: 20px;">
+                        <label for="">Management Comment</label>
+                     <textarea name="principalReport" value="" id="" style="resize:none; padding: 20px; " cols="20" rows="3"></textarea>
+                     <button type="submit" style="background: rgb(6, 6, 73); width: 30%; color: white; border: 0; border-radius: 7px;">Submit Comment</button>
+                    </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -151,15 +151,13 @@
         </div>
         <!-- Page Area End Here -->
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    @if(session('showModal'))
     <script>
-        window.addEventListener('load', function () {
-            var myModal = new bootstrap.Modal(document.getElementById('thankYouModal'));
-            myModal.show();
-        });
+               const image=document.querySelector(".image_pick");
+const   image_file = document.querySelector(".image_file");
+image_file.addEventListener("change", ()=>{
+image.src=URL.createObjectURL(image_file.files[0]);
+});
     </script>
-    @endif
     <!-- jquery-->
     <script src="/js/jquery-3.3.1.min.js"></script>
     <!-- Plugins js -->

@@ -78,21 +78,14 @@
                                 <div class="item-title">
                                     <h3>Exam Results</h3>
                                 </div>
+                                @foreach ($approve as $approves)
+                                @if (!empty($approves->Schoolstamp))
+                                <h2 style="background: green; color: white; padding: 10px;">APPROVED</h2>
+                                @endif
+                                @endforeach
                             </div>
                             <div class="table-box-wrap">
-                                {{-- <form class="search-form-box">
-                                    <div class="row gutters-8">
-                                        <div class="col-lg-4 col-md-3 form-group">
-                                            <input type="text" placeholder="Search by Exam ..."
-                                                class="form-control">
-                                        </div>
-                                      
-                                        <div class="col-lg-2 col-md-3 form-group">
-                                            <button type="submit"
-                                                class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
-                                        </div>
-                                    </div>
-                                </form> --}}
+                              
                                 <div class="table-responsive result-table-box" >
                                         <table class="table display data-table text-nowrap">
                                             <thead>

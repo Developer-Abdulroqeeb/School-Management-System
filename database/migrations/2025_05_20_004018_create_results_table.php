@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string("studentId")->nullable();
             $table->string("test")->nullable();
             $table->string("exam")->nullable();
+            $table->string("principalComment")->nullable();
+            $table->string("teacherComment")->nullable();
+            $table->string("schoolStamp")->nullable();
             $table->string("aggregate")->nullable();
             $table->timestamps();
         });

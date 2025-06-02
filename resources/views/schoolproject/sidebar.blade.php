@@ -132,7 +132,7 @@
                                     <a href="{{route("schoolproject.pendingpayment")}}" class="nav-link"><i class="fas fa-angle-right"></i>Pending Payment</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route("schoolproject.approvepayment")}}" class="nav-link"><i class="fas fa-angle-right"></i>Approved Payment</a>
+                                    <a href="{{route("schoolproject.approvedpayment")}}" class="nav-link"><i class="fas fa-angle-right"></i>Approved Payment</a>
                                 </li>
                                    {{-- <li class="nav-item">
                                     <a href="{{route("schoolproject.addpayment")}}" class="nav-link"><i class="fas fa-angle-right"></i>0Payment Fee</a>
@@ -151,9 +151,14 @@
                         <li class="nav-item">
                             <a href="{{route("schoolproject.messaging")}}" class="nav-link"><i class="flaticon-chat"></i><span>Messeage</span></a>
                         </li>
-                         <li class="nav-item sidebar-nav-item">
+                        <li class="nav-item ">
+                            <a href="{{route("schoolproject.approveresult")}}" class="nav-link"><i class="fa fa-book"></i><span>Approve Results</span></a>
+                        </li>
+                 
+                        {{-- <li> --}}
+                         {{-- <li class="nav-item sidebar-nav-item">
                             <a href="#" class="nav-link"><i class="flaticon-menu-1"></i><span>UI Elements</span></a>
-                            <ul class="nav sub-group-menu">
+                            <ul class="nav sub-group-menu"> --}}
                                 {{-- <li class="nav-item">
                                     <a href="notification-alart.html" class="nav-link"><i class="fas fa-angle-right"></i>Alart</a>
                                 </li> --}}
@@ -176,22 +181,26 @@
                                     <a href="ui-widget.html" class="nav-link"><i
                                             class="fas fa-angle-right"></i>Widget</a>
                                 </li> --}}
-                            </ul>
-                        </li>
+                            {{-- </ul>
+                        </li> --}}
                         {{-- <li class="nav-item">`
                             <a href="{{route("schoolproject.map")}}" class="nav-link"><i class="flaticon-planet-earth"></i><span>Map</span></a>
                         </li> --}}
                         <li class="nav-item sidebar-nav-item">
-                            <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Student Promotion</span></a>
+                            <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Make Update</span></a>
                             <ul class="nav sub-group-menu">
                                    <li class="nav-item">
                                     <a href="{{route("schoolproject.promoteStudent")}}" class="nav-link"><i class="fas fa-angle-right"></i>Promote student</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route("schoolproject.updateterm")}}" class="nav-link"><i class="fas fa-angle-right"></i>Update term/session</a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a href="{{route("schoolproject.school_setting")}}" class="nav-link"><i class="flaticon-settings"></i><span>School Setting</span></a>
                         </li>
+
                     </ul>
                 </div>
                

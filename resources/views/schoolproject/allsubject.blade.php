@@ -108,7 +108,16 @@
                                                 <option value="Third Term">Third Term</option>
                                             </select>
                                         </div>
-
+                                        <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                            <label>Select tutor*</label>
+                                            <select name="tutor" class="select2">
+                                                <option value="0"  disabled>Please Select</option>
+                                                @foreach ($tutor as $tutors)
+                                                <option value="{{$tutors->id}}">{{$tutors->firstname}} {{$tutors->lastname}}</option>
+                                                    
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <div class="col-12 form-group mg-t-8">
                                             <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
                                             <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>

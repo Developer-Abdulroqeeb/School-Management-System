@@ -30,9 +30,20 @@
                             <a href="{{route("schoolproject.student_subjects", $query->classteacher)}}" class="nav-link"><i class="fa fa-book"></i><span>Student Subjects</span></a>
                         </li>
                      
-                        <li class="nav-item sidebar-nav-item"> 
-                            <a href="{{route("schoolproject.uploadresult")}}" class="nav-link"><i class="fa fa-pen"></i><span>Upload Results</span></a>
+                        
+                        <li class="nav-item sidebar-nav-item">
+                            <a href="#" class="nav-link"><i class="flaticon-shopping-list"></i><span>Result</span></a>
+                            <ul class="nav sub-group-menu">
+                                <li class="nav-item"> 
+                                    <a href="{{route("schoolproject.uploadresult")}}" class="nav-link"><i class="fas fa-angle-right"></i>Upload Results</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route("schoolproject.exam_grade")}}" class="nav-link"><i class="fas fa-angle-right"></i>Incoming Result</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route("schoolproject.sendresult")}}" class="nav-link"><i class="fas fa-angle-right"></i>Send Result</a>
+                                </li>
+                            </ul>
                         </li>
-                       
                     </ul>
                 </div>

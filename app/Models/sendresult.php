@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class subject extends Model
+class sendresult extends Model
 {
     use HasFactory;
-    public $fillable = ["subject_name","class","term","session","tutor"];
+    public $fillable = ["class",'term',"session","test","exam","studentId","subjectId","aggregate"];
 }

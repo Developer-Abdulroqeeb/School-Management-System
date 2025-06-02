@@ -93,7 +93,7 @@
                                         <th>Date Paid</th>
                                         <th>Cost</th>
                                         <th>Amount Paid</th>
-                                        <th>Balance</th>
+                                        {{-- <th>Balance</th> --}}
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -119,8 +119,8 @@
                                         <td> {{$history->created_at}}</td>
                                         <td> {{$expense->amount}}</td>
                                         <td> {{$history->amount}}</td>
-                                        <td>{{$expense->amount-$history->amount}}</td>
-                                        <td>
+                                        {{-- <td>{{$expense->amount-$history->amount}}</td> --}}
+                                        <td id="status">
                                                             {{$history->status}}
                                         </td>
                                     </tr>
@@ -138,6 +138,22 @@
         <!-- Page Area End Here -->
     </div>
     <!-- jquery-->
+    <script>
+        const status = document.querySelectorAll("#status");
+        if(status.innerHTML === "PENDING"){
+            status.style.background = "yellow";
+            status.style.color = "white";
+
+        }   else if(status.innerHTML === "DECLINED"){
+            status.style.background = "red";
+            status.style.color = "white";
+
+        }else{
+            status.style.background = "green";
+            status.style.color = "white";
+
+        }
+    </script>
     <script src="/js/jquery-3.3.1.min.js"></script>
     <!-- Plugins js -->
     <script src="/js/plugins.js"></script>

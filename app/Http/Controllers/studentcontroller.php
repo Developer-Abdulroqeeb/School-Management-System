@@ -9,6 +9,8 @@ use App\Models\student;
 use App\Models\studentclass;
 use App\Models\schoolfee;
 use App\Models\receipt;
+use App\Models\result;
+
 use App\Models\subject;
 use App\Models\Teacher;
 use App\Models\studentparent;
@@ -577,27 +579,28 @@ public function studentdashboard(Request $request){
   $parent = DB::table("studentparents")->where("id", $parentId)->first();
   $notice_count = notice::where("notice_for", "parent")->count();
   $student = DB::table("student-information")->where("parent_id", $parentId)->get();
+  // $studentCount = DB::table("student-information")->where("parent_id", $parentId)->count();
+  $amount_paid = receipt::where("parent_id", $parentId)->sum("amount");  
  
-  $class = DB::table('student-information')
-        ->where('parent_id', $parentId)
-        ->pluck('class')
-        ->unique();
-  $term = DB::table('student-information')
-        ->where('parent_id', $parentId)
-        ->pluck('term')
-        ->unique();
-  $session = DB::table('student-information')
-        ->where('parent_id', $parentId)
-        ->pluck('session')
-        ->unique();
+  $children = DB::table('student-information')
+  ->where('parent_id', $parentId)
+  ->select('class', 'term', 'session')
+  ->get();
 
-        $totalExpenses = schoolfee::whereIn('class', $class)
-    ->whereIn('term', $term)
-    ->whereIn('session', $session)
-    ->sum('amount');
+$totalExpenses = 0;
+
+foreach ($children as $child) {
+  $fee = DB::table('schoolfees')
+      ->where('class', $child->class)
+      ->where('term', $child->term)
+      ->where('session', $child->session)
+      ->sum('amount'); // get the fee for this specific combo
+
+  $totalExpenses += $fee ?? 0; // if no fee found, add 0
+}
 
   return view("schoolproject.parentdash", 
-  compact("parent","student","notice_count","class","term","session","totalExpenses"));
+  compact("parent","student","notice_count","children","fee","totalExpenses","amount_paid"));
  }
  public function teacherdashboard(Request $request){
   $teacherId = Session::get("teacher_id");
@@ -694,12 +697,7 @@ $query =  DB::table("academicsessions")
     
   }
   public function addsubject(Request $request){
-
   $insert = subject::create($request->all());
-    $query = DB::table("subjects")->get();
-    $class = DB::table("studentclasses")->get();
-   
-    // return view("schoolproject.allsubject", compact("insert","query","class"));
     return redirect()->route("schoolproject.allsubject");
   }
   public function allsubject(Request $request){
@@ -709,7 +707,9 @@ $query =  DB::table("academicsessions")
     ->select("academic_session")
     ->distinct()
     ->get();
-    return view("schoolproject.allsubject", compact("query","class","sch_session"));
+    $tutor = DB::table("teachers")->get();
+
+    return view("schoolproject.allsubject", compact("query","class","sch_session","tutor"));
   }
   public function deletesubject(Request $request,$id){
     $del = subject::find($id);
@@ -758,6 +758,24 @@ public function getBookss(Request $request)
       public function studentpromotion(Request $request){
         return view("schoolproject.studentpromotion");
       }
+    // update term and session
+    public function updateterm(Request $request){
+      $select = DB::table("academicsessions")
+      ->select("academic_session")
+      ->distinct()
+      ->get();
+      return view("schoolproject.updateterm", compact("select"));
+    }
+    // update form
+    public function updatetermform(Request $request){
+      $session = $request->session;
+      $term = $request->term;
+      $update = DB::table("student-information")->update([
+        "session"=>$session,
+        "term"=>$term
+      ]);
+      return redirect()->route("schoolproject.updateterm")->with("showModal",true);
+    }
   public function getHostel(Request $request){
         $students = DB::table('hostels')
         ->where('hostel_name', $request->food_class)
@@ -965,7 +983,17 @@ public function each_class_bills(Request $request){
        ->sum('aggregate');
       // $total = $count*100;
       // $pecentage = $aggregate/$total *100;
-     return view("schoolproject.parentviewresult", compact("query","count","aggregate"));
+    $approve =  DB::table("results")
+    ->where([
+      "studentId" =>$child_id,
+       "class" => $class,
+        "term" => $term,
+        "session" => $session
+     ])
+     ->select('Schoolstamp')
+     ->distinct()
+     ->get();
+     return view("schoolproject.parentviewresult", compact("query","count","approve","aggregate"));
 
   }
   public function parentprofile(Request $request){
@@ -1088,11 +1116,14 @@ public function resultform(Request $request){
   $studentId = $request->studentId;
   $term = $request->term;
   $session = $request->session;
+  $class = $request->class;
   $checkStudent = DB::table("results")
   ->where([
     "studentId"=> $studentId,
     "term" => $term,
-    "session" => $session
+    "session" => $session,
+    "class" => $class
+
   ])->exists();
 
   if($checkStudent){
@@ -1265,6 +1296,151 @@ public function declineform(Request $request){
   ]);
   return redirect()->route("schoolproject.pendingpayment")->with("showModal", true);
 
+}
+// approved payment page
+public function approvedpayment(Request $request){
+  $approved = receipt::where("status", "APPROVED")->get();
+  return view("schoolproject.approvedpayment", compact("approved"));
+}
+public function approve($id){
+  $select = DB::table("receipts")->where("id", $id)->first();
+  return view("schoolproject.approve", compact("select"));
+}
+// approve payment
+public function approveform(Request $request){
+  $feeId = $request->feeId;
+  $update_amount = receipt::where("id", $feeId)->update([
+    "status"=>"APPROVED",
+    "amount" =>$request->amount
+  ]);
+  return redirect()->route("schoolproject.approvedpayment")->with("showModal", true);
+}
+public function approveresult(Request $request){
+  $class = DB::table("studentclasses")->get();
+  $getSession = DB::table("academicsessions")->select("academic_session")->distinct()->get();
+  return view("schoolproject.approveresult", compact("class", "getSession"));
+}
+public function selectstudentresult(Request $request){
+  return view("schoolproject.selectstudentresult");
+}
+public function approveresultform(Request $request){
+  // $getChildResult = DB::get
+  $session = $request->session;
+  $term = $request->term;
+  $class = $request->class;
+
+  $getStudent = DB::table("results")->where([
+    "term"=>$term,
+    "session"=>$session,
+    "class" =>$class
+  ])
+  ->select("studentId","term","session","class")
+  ->distinct()
+  ->get();
+ 
+  return view("schoolproject.selectstudentresult", compact("getStudent"));
+}
+public function continueresultform(Request $request){
+  $studentId = $request->studentId;
+  $term = $request->term;
+  $session = $request->session;
+  $class = $request->class;
+  $select = DB::table("results")->where([
+  "studentId"=>$studentId,
+  "term"=>$term,
+  "session"=>$session,
+  "class"=>$class
+  ])->get();
+  $selectDistinct = DB::table("results")->where([
+    "studentId"=>$studentId,
+    "term"=>$term,
+    "session"=>$session,
+    "class"=>$class
+    ])
+    ->select("studentId","term","session","class")
+    ->distinct()
+    ->get();
+    $approve = DB::table("results")
+    ->where([
+      "studentId"=>$studentId,
+      "term"=>$term,
+      "session"=>$session,
+      "class"=>$class
+      ])
+    ->select("Schoolstamp")
+    ->distinct()
+    ->get();
+  return view("schoolproject.finalapproveresult", compact("select","selectDistinct","approve"));
+}
+
+// sending result
+public function sendresult(Request $request){
+  $class = DB::table("studentclasses")->get();
+  $academic = DB::table("academicsessions")
+  ->select("academic_session")
+  ->distinct()
+  ->get();
+  return view("schoolproject.sendresult", compact("class","academic"));
+}
+
+public function teachersendresult(Request $request){
+  return view("schoolproject.teachersendresult");
+}
+public function teachersendresultform(Request $request){
+  
+}
+
+// sending result form
+
+public function sendresultform(Request $request){
+  $class  = $request->class;
+  $term = $request->term;
+  $session = $request->session;
+  $teacherId = Session::get("teacher_id");
+  
+  $selectStudent = DB::table("student-information")->where(
+    [
+"class" => $class,
+"session" => $session,
+"term" => $term
+    ]
+  )
+  ->get();
+  $subject = DB::table("subjects")->where([
+    "class" => $class,
+    "session" => $session,
+    "term" => $term,
+    "tutor" => Session::get("teacher_id")
+  ])
+  ->get();
+// return $session;
+  // return $term;
+  return view("schoolproject.teachersendresult", compact("selectStudent",  "subject"));
+}
+public function finalapproveresult(Request $request){
+  return view("schoolproject.finalapproveresult");
+}
+// update principal report
+public function updateprincipalreport(Request $request){
+  $term = $request->term;
+  $session = $request->session;
+  $studentId = $request->studentId;
+  $class = $request->class;
+    if ($request->hasFile('file_upload')) {
+      $image = $request->file( 'file_upload');
+      $path = $image->store('uploads','public');
+      }
+  $updateReport = DB::table("results")->where([
+    "term"=>$term,
+    "session"=>$session,
+    "studentId"=>$studentId,
+    "class"=>$class
+  ])
+  ->update( [
+      "principalComment" =>$request->principalReport,
+      "schoolStamp"=>$path
+  ]);
+  return redirect()->route("schoolproject.approveresult")->with("showModal", true);
 }
 }
 

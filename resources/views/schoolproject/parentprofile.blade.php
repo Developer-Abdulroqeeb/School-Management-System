@@ -52,7 +52,7 @@
                     <h3>Parent</h3>
                     <ul>
                         <li>
-                            <a href="{{route("schoolproject.parentdashboard")}}">Home</a>
+                            <a href="{{route("schoolproject.parentdash")}}">Home</a>
                         </li>
                         <li>My profile</li>
                     </ul>

@@ -9,8 +9,6 @@ Route::get("tettstmail", [studentcontroller::class, "emailtest"]);
 
 Route::get("schoolproject/index", [studentcontroller::class, "index"])->name("schoolproject.index");
 Route::post("schoolproject/loginform", [studentcontroller::class, "loginform"])->name("schoolproject.loginform");
-
-
 Route::get("/teachers/payment",[studentcontroller::class, 'teacherspayment'])->name("schoolproject.payment");
 Route::get("schoolproject/dashboard", [studentcontroller::class, "dashboard"])->name("schoolproject.dashboard");
 Route::get("schoolproject/admin-account-settings", [studentcontroller::class, "adminaccount_settings"])->name("schoolproject.adminaccount_settings");
@@ -108,16 +106,30 @@ Route::post("AdminsendMessage", [studentcontroller::class, "AdminsendMessage"])-
 Route::post("paymentform", [studentcontroller::class, "paymentform"])->name("schoolproject.paymentform");
 Route::get("sendproof/{id}", [studentcontroller::class, "sendproof"])->name("schoolproject.sendproof");
 Route::post("sendproofform/", [studentcontroller::class, "sendproofform"])->name("schoolproject.sendproofform");
-Route::get("approvepayment", [studentcontroller::class,"approvepayment"])->name("schoolproject.approvepayment");
+Route::get("approvedpayment", [studentcontroller::class,"approvedpayment"])->name("schoolproject.approvedpayment");
 Route::get("pendingpayment", [studentcontroller::class, "pendingpayment"])->name("schoolproject.pendingpayment");
 Route::put("declineform", [studentcontroller::class, "declineform"])->name("schoolproject.declineform");
-// });
+Route::get("approve/{id}", [studentcontroller::class, "approve"])->name("schoolproject.approve");
+Route::put("approveform/", [studentcontroller::class, "approveform"])->name("schoolproject.approveform"); 
+Route::get("updateterm", [studentcontroller::class, "updateterm"])->name("schoolproject.updateterm");
+Route::put("updatetermform", [studentcontroller::class, "updatetermform"])->name("schoolproject.updatetermform");
+Route::get("approveresult", [studentcontroller::class, "approveresult"])->name("schoolproject.approveresult");
+Route::post("approveresultform", [studentcontroller::class, "approveresultform"])->name("schoolproject.approveresultform");
+Route::get("selectstudentresult", [studentcontroller::class, "selectstudentresult"])->name("schoolproject.selectstudentresult");
+Route::get("finalapproveresult/", [studentcontroller::class, "finalapproveresult"])->name("schoolproject.finalapproveresult");
+Route::post("continueresultform/", [studentcontroller::class, "continueresultform"])->name("schoolproject.continueresultform");
 Route::get("parentpaymentstatus/", [studentcontroller::class, "parentpaymentstatus"])->name("schoolproject.parentpaymentstatus");
 Route::get("select-child", [studentcontroller::class, "selectChildPayment"])->name("schoolproject.selectChildPayment");
 Route::post("payexpenses", [studentcontroller::class, "payexpenses"])->name("schoolproject.payexpenses");
 Route::get("makePayment/", [studentcontroller::class, "makePayment"])->name("schoolproject.makePayment");
 Route::get("all-fees", [studentcontroller::class, "all_fees"])->name("schoolproject.all_fees");
 Route::get("addpayment", [studentcontroller::class, "addpayment"])->name("schoolproject.addpayment");
+Route::put("updateprincipalreport", [studentcontroller::class, "updateprincipalreport"])->name("schoolproject.updateprincipalreport");
+Route::get("sendresult", [studentcontroller::class, "sendresult"])->name("schoolproject.sendresult");
+Route::post("sendresultform", [studentcontroller::class, "sendresultform"])->name("schoolproject.sendresultform");
+Route::get("teachersendresult", [studentcontroller::class, "teachersendresult"])->name("schoolproject.teachersendresult");
+Route::post("teachersendresultform/", [studentcontroller::class, "teachersendresultform"])->name("schoolproject.teachersendresultform");
+
 Route::get("forgot-password/", [studentcontroller::class, "forgotpassword"])->name("schoolproject.forgotpassword");
 Route::post("forgotform/", [studentcontroller::class, "forgotform"])->name("schoolproject.forgotform");
 Route::get("change-password/", [studentcontroller::class, "changepassword"])->name("schoolproject.changepassword");
