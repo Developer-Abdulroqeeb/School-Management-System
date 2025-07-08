@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AKKHOR | Result Sending</title>
+    <title>AKKHOR | Incoming Result</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -61,7 +61,7 @@
             <div class="dashboard-content-one">
                 <!-- Breadcubs Area Start Here -->
                 <div class="breadcrumbs-area">
-                    <h3>Continue</h3>
+                    <h3>Student Result</h3>
                     <ul>
                         <li>
                             <a href="index.html">Home</a>
@@ -71,20 +71,13 @@
                 </div>
                 <!-- Breadcubs Area End Here -->
                 <!-- Dashboard summery Start Here -->
-                <form class="new-added-form" method="POST" action="{{route("schoolproject.sendresultform")}}">
+                <form class="new-added-form" method="POST" action="{{route("schoolproject.incomingresultform")}}">
                 @csrf
                     <div class="row" style="background: white; padding:20px;">
                   
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
                     <label>Class</label>
-                    <select class="select2" required name="class" id="">
-                        @foreach ($class as $studentclass)
-                        <option value="{{ $studentclass->class}}">
-                            {{ $studentclass->class}}
-                        </option>
-                        @endforeach
-             
-                    </select>
+                   <input type="text" value="{{$class->classteacher}}" name="class" readonly class="form-control">
                 </div>
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
                     <label>Term</label>
@@ -101,6 +94,14 @@
                     </select>
                 </div>
                 <div class="col-xl-3 col-lg-6 col-12 form-group">
+                    <label>Subject</label>
+                    <select class="select2" required name="subject" id="">
+                        @foreach ($subjects as $subject)
+                        <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
+                         @endforeach
+                        </select>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-12 form-group">
                     <label>Session</label>
                     <select class="select2"  required name="session" id="">
                        @foreach ($academic as $session )
@@ -112,23 +113,7 @@
                 </div>
                 </div>
                 <button type="submit" name="submit" style="background: rgb(25, 25, 118); padding: 10px; border-radius: 10px; border: 0; color: white;">Continue</button>
-
                 </form>
-                {{-- modal start --}}
-                <div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="thankYouModalLabel">Failed !!!</h5>
-                          {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button> --}}
-                        </div>
-                        <div class="modal-body" style="color: red;">
-                            Already Added Results for these students for this term and session
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {{-- modal end --}}
                 <footer class="footer-wrap-layout1">
                     <div class="copyright">© Copyrights <a href="#">akkhor</a> 2019. All rights reserved. Designed by <a
                             href="#">PsdBosS</a></div>
@@ -138,15 +123,7 @@
         </div>
         <!-- Page Area End Here -->
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    @if(session('showModal'))
-    <script>
-        window.addEventListener('load', function () {
-            var myModal = new bootstrap.Modal(document.getElementById('thankYouModal'));
-            myModal.show();
-        });
-    </script>
-    @endif
+
     <!-- jquery-->
     <script src="/js/jquery-3.3.1.min.js"></script>
     <!-- Plugins js -->

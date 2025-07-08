@@ -38,7 +38,7 @@
                                     <a href="{{route("schoolproject.uploadresult")}}" class="nav-link"><i class="fas fa-angle-right"></i>Upload Results</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route("schoolproject.exam_grade")}}" class="nav-link"><i class="fas fa-angle-right"></i>Incoming Result</a>
+                                    <a href="{{route("schoolproject.incomingresult")}}" class="nav-link"><i class="fas fa-angle-right"></i>Incoming Result</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{route("schoolproject.sendresult")}}" class="nav-link"><i class="fas fa-angle-right"></i>Send Result</a>

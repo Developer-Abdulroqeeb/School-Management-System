@@ -97,8 +97,8 @@
                                             <label>Notice For</label>
                                             <select name="notice_for" class="select2" id="">
                                                 <option value="parent">parents</option>
-                                                <option value="parent">teachers</option>
-                                                <option value="parent">students</option>
+                                                <option value="teacher">teachers</option>
+                                                <option value="student">students</option>
                                             </select>
                                         </div>
                                         <div class="col-12-xxxl col-lg-6 col-12 form-group">

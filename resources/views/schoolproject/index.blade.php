@@ -28,6 +28,104 @@
     <!-- Modernize js -->
     <script src="/js/modernizr-3.6.0.min.js"></script>
 </head>
+{{-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Slider with Text</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .slider {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      height: 400px;
+      margin: auto;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: opacity 1s ease-in-out;
+      opacity: 0;
+    }
+    .slide.active {
+      opacity: 1;
+    }
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .text-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 30px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    }
+  </style>
+</head>
+<body>
+
+<div class="slider" id="slider">
+  <!-- Slides will be added by JS -->
+</div>
+
+<script>
+  const slides = [
+    {
+      image: "https://picsum.photos/id/1015/800/400",
+      text: "Beautiful Mountains"
+    },
+    {
+      image: "https://picsum.photos/id/1016/800/400",
+      text: "Calm Lake"
+    },
+    {
+      image: "https://picsum.photos/id/1018/800/400",
+      text: "Serene Forest"
+    },
+    {
+      image: "https://picsum.photos/id/1019/800/400",
+      text: "Sunny Beach"
+    }
+  ];
+
+  const slider = document.getElementById("slider");
+
+  slides.forEach((slide, index) => {
+    const div = document.createElement("div");
+    div.classList.add("slide");
+    if (index === 0) div.classList.add("active");
+    div.innerHTML = `
+      <img src="${slide.image}" alt="Slide ${index + 1}">
+      <div class="text-overlay">${slide.text}</div>
+    `;
+    slider.appendChild(div);
+  });
+
+  let current = 0;
+  setInterval(() => {
+    const allSlides = document.querySelectorAll(".slide");
+    allSlides[current].classList.remove("active");
+    current = (current + 1) % slides.length;
+    allSlides[current].classList.add("active");
+  }, 10000); // 10 seconds
+</script>
+
+</body>
+</html> --}}
+
+{{-- give me the code to do sliding images that changes every 10s with text being on those image and the text also changes with image using javascript --}}
 
 <body>
     <!-- Preloader Start Here -->

@@ -123,7 +123,7 @@
                                 </div>
                                 <div class="doughnut-chart-wrap">
                                     <canvas id="student-doughnut-chart" width="100" height="270"></canvas>
-                                </div>
+                                 </div>
                                 <div class="student-report">
                                     <div class="student-count pseudo-bg-blue">
                                         <h4 class="item-title">Female Students</h4>

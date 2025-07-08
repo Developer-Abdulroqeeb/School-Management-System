@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Mail\WelcomeMail;
+use App\Models\bank;
 use App\Models\message;
 use Illuminate\Support\Facades\Mail;
 use App\Models\notice;
@@ -10,7 +11,7 @@ use App\Models\studentclass;
 use App\Models\schoolfee;
 use App\Models\receipt;
 use App\Models\result;
-
+use App\Models\token;
 use App\Models\subject;
 use App\Models\Teacher;
 use App\Models\studentparent;
@@ -29,6 +30,7 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 use function PHPUnit\Framework\returnArgument;
 class studentcontroller extends Controller
 {
+  
   // public function emailtest(Request $request){
   //  $mail = Mail::to("hammedlawal09@gmail.com")->send(new WelcomeMail());
   //  if($mail){
@@ -36,7 +38,10 @@ class studentcontroller extends Controller
   //  }
   // }
   //  admin acccount setting
-Public function adminaccount_settings(Request $request){
+  // public function home(){
+  //   return view('index');
+  // }
+public function adminaccount_settings(Request $request){
     return view("schoolproject.adminaccount_settings");
 }
 // messageing from admin
@@ -150,16 +155,25 @@ $selectStudent = DB::table("student-information")->where([
        ])->update([
         "password" => $request->confirm_password
        ]);
-       return redirect()->route("schoolproject.index");
+       return redirect()->route(route: "schoolproject.index");
   }
 }
 
 Public function dashboard(Request $request){
-  $student = DB::table("student-information")->count();
-  $teacher = DB::table("teachers")->count();
-  $parent = DB::table("studentparents")->count();
-    return view("schoolproject.dashboard", compact("student","teacher","parent"));
-}
+
+      $student = DB::table("student-information")->count();
+      $teacher = DB::table("teachers")->count();
+      $parent  = DB::table("studentparents")->count();
+  
+      $maleCount   = DB::table("student-information")->where('Gender', 'male')->count();
+      $femaleCount = DB::table("student-information")->where('Gender', 'female')->count();
+     $totalEarnings = DB::table("receipts")->sum("amount");
+      return view("schoolproject.dashboard", compact(
+          "student", "totalEarnings","teacher", "parent", "maleCount", "femaleCount"
+      ));
+  }
+  
+
 public function admit_form(Request $request){
   $hostel = DB::table("hostels")->get();
       $classes = DB::table("studentclasses")->get();
@@ -539,31 +553,33 @@ public function loginform(Request $request) {
     $student = DB::table("student-information")->where('username',$username)->first();
 
     if($student  && $student->password === $password){
-      Session::put('student_id', $student->id);
+      // Session::put('student_id', $student->id);
       Session::put('username', $student->username);
+      Session::put('student_id', $student->id);
 
-      return redirect()->route("schoolproject.all_student");
+      return redirect()->route("schoolproject.studentdashboard");
     }
      $teacher = DB::table("teachers")->where('username',$username)->first();
     if($teacher  && $teacher->password === $password){
-      Session::put('teacher_id', $teacher->id);
+      // Session::put('teacher_id', $teacher->id);
       Session::put('class_teacher', $teacher->classteacher);
+      Session::put('teacher_id', $teacher->id);
+
  
       
       return redirect()->route("schoolproject.teacherdashboard");
-    }
-    
+    }    
     $parent = DB::table("studentparents")->where('username',$username)->first();
     if($parent  && $parent->password === $password){
-      Session::put('parent_id', $parent->id);
+      // Session::put('parent_id', $parent->id);
       Session::put('username', $parent->username);
-    
-      
+      Session::put('parent_id', $parent->id); 
       return redirect()->route("schoolproject.parentdash");
     }
     $admin = DB::table("admins")->where('username',$username)->first();
     if($admin  && $admin->password === $password){
-      Session::put('admin_id', $admin->id);
+      // Session::put('admin_id', $admin->id);
+      Session::put('admin_id', $admin->id);         
       Session::put('username', $admin->username);
       return redirect()->route("schoolproject.dashboard");
     }
@@ -571,8 +587,163 @@ public function loginform(Request $request) {
 
 return back()->withErrors(['username' => 'Invalid credentials']);
 }
+// student page about to start
 public function studentdashboard(Request $request){
-  return view("schoolproject.studentdashboard");
+  $notice_number = DB::table("notices")->where("notice_for", "student")->count();
+  $notice = DB::table("notices")->where("notice_for", "student")->get();
+  return view("schoolproject.studentdashboard", compact("notice_number","notice"));
+}
+// student profile
+public function studentprofile(Request $request,$id){
+ $profile = DB::table("student-information")->where("id", $id)->first();
+ $parent_name = DB::table("studentparents")->where("id", $profile->parent_id)->first();
+  return view("schoolproject.studentprofile", compact("profile","parent_name"));
+}
+// student result
+public function studentresult(Request $request){
+  return view("schoolproject.studentresult");
+}
+// student account setings
+public function studentsettings($id){
+  $student = DB::table("student-information")->where("id", $id)->first();
+  return view("schoolproject.studentsettings", compact("student"));
+}
+// student update account settings
+public function studensettingsform(Request $request){
+  $studentId = $request->studentId;
+  $oldPassword = $request->old_password;
+  $checkPassword = DB::table("student-information")->where("id", $studentId)->first();
+  if($checkPassword && $checkPassword->password === $oldPassword){
+ 
+   if ($request->hasFile('file_upload')) {
+   $image = $request->file(key: 'file_upload');
+   $path = $image->store('uploads',options: 'public');
+   }else {
+     $path = $checkPassword->profileImage; // Keep old image if no new upload
+ }
+ 
+  $edit = DB::table("student-information")->where("id", $studentId)->update([
+   "profileImage" => $path,
+   "password" => $request->confirm_password
+ ]);
+ return redirect()->route("schoolproject.studentprofile",$studentId )->with("showModal", true);
+  }else{
+   return back()->withErrors(['old_password' => 'Old Password is not correct']);
+  }
+}
+public function testing(Request $request){
+  return "testing";
+}
+// stuident expenses
+public function studentexpenses(Request $request){
+  $select = DB::table("student-information")->where("id", Session::get("student_id"))->first();
+
+  $getExpenses = DB::table("schoolfees")->where([
+    "term" => $select->term,
+    "session" => $select->session,
+    "class" => $select->class
+  ])->get();
+  $getSum = DB::table("schoolfees")->where([
+    "term" => $select->term,
+    "session" => $select->session,
+    "class" => $select->class
+  ])->sum('amount');
+  return view("schoolproject.studentexpenses", compact("select","getExpenses","getSum"));
+}
+// studnt selecting class to proceed
+public function studentselectclass(Request $request){
+  $class = DB::table("studentclasses")->get();
+  $academic =  DB::table("academicsessions")
+->select("academic_session")
+->distinct()
+->get();
+  return view("schoolproject.studentselectclass", compact("class","academic"));
+}
+
+// student buy token
+public function buytoken(Request $request){
+  $session = $request->session;
+  $term = $request->term;
+  $class = $request->class;
+  $studentId = $request->studentId;
+  $checkToken = token::where([
+    "session" => $session,
+    "term" => $term,
+    "class" => $class,
+    "studentId" => $studentId
+
+  ])->exists();
+if($checkToken){
+  return back()->withErrors(['token' => 'Student Already Generete Token for this Semester']);
+}else{
+  $buytoken = token::create(request()->all());
+
+}
+
+  return redirect()->route("schoolproject.studentselectclass")->with("showModal", true);
+}
+// student notification
+public function studentnotification(Request $request){
+  return view("schoolproject.studentnotification");
+}
+public function studentseeresult(Request $request){
+  return view("schoolproject.studentseeresult");
+}
+// student see result
+public function studentseeresultform(Request $request){
+  $class = $request->class;
+  $term = $request->term;
+  $session = $request->session;
+  $studentid = $request->studentid;
+  $token = $request->token;
+  $checktoken = DB::table("tokens")->where([
+    "class" => $class,
+    "session" =>  $session,
+     "term" =>  $term,
+     "studentId" => $studentid 
+  ])->exists();
+  if($checktoken){
+    $confirmToken = DB::table("tokens")->where( "token", $token)->first();
+  // return $student->class;
+  if($confirmToken){
+   $query = DB::table("results")->where([
+    "class" => $confirmToken->class,
+    "session" =>  $confirmToken->session,
+     "term" =>  $confirmToken->term,
+     "studentId" => $confirmToken->studentId
+   ])->get();
+
+   $count = DB::table("results")
+     ->where([
+      "class" => $confirmToken->class,
+      "session" =>  $confirmToken->session,
+       "term" =>  $confirmToken->term,
+       "studentId" => $confirmToken->studentId
+      ])
+      ->count();
+      $aggregate = DB::table("results")
+      ->where([
+        "class" => $confirmToken->class,
+    "session" =>  $confirmToken->session,
+     "term" =>  $confirmToken->term,
+     "studentId" => $confirmToken->studentId
+       ])
+       ->sum('aggregate');
+
+
+   return view("schoolproject.studentseeresult", compact("query","count","aggregate","confirmToken"));
+      }else{
+        return back()->withErrors(['studentId' => 'Invalid Token']);
+      }
+  }else{
+    return back()->withErrors(['studentId' => 'No token registered']);
+  }
+  
+}
+public function tokenhistory(Request $request){
+  $query = token::where("studentId", Session::get("student_id"))->get();
+
+  return view("schoolproject.tokenhistory", compact("query"));
 }
  public function parentdashboard(Request $request){
   $parentId = Session::get("parent_id");
@@ -881,6 +1052,16 @@ public function noticeform(Request $request){
 public function all_school_bills(Request $request){
   $query = DB::table("schoolfees")->get();
   return view("schoolproject.all_school_bills", compact("query"));
+}
+// ADD BANK ACCOUNT
+public function addbank(Request $request){
+  $select = DB::table("banks")->get();
+ return view("schoolproject.addbank", compact("select"));
+}
+// bank form
+public function bankform(Request $request){
+  $insert = bank::create($request->all());
+  return redirect()->route('schoolproject.addbank')->with('showModal', true);
 }
 // delte bill
 public function deletebillform($id){
@@ -1387,12 +1568,44 @@ public function teachersendresult(Request $request){
   return view("schoolproject.teachersendresult");
 }
 public function teachersendresultform(Request $request){
-  
+  $count = count($request->studentId);
+  $class = $request->class;
+  $term = $request->term;
+  $session = $request->session;
+  $subject = $request->subject;
+  $checkresult = DB::table("sendresults")->where([
+   "term" => $term,
+   "session" => $session,
+   "class" => $class,
+   "subjectId" => $subject
+  ])
+  ->exists();
+  if($checkresult){
+    return redirect()->route("schoolproject.sendresult")->with("showModal", true);
+
+    // return back()->withErrors(['subjectId' => 'Results Added for this semester, term and session for this students']);
+  }else{
+    for ($i = 0; $i < $count; $i++) {
+      $insert = Db::table("sendresults")->insert(values:[
+          "studentId" => $request->studentId[$i],
+          "class" => $request->class,
+          "subjectId" => $request->subject,
+          "term" => $request->term,
+          "session" => $request->session,
+          "test" => $request->test[$i],
+          "exam" => $request->exam[$i],
+          "aggregate" => $request->exam[$i] + $request->test[$i]
+      ]);
+    }
+    return redirect()->route("schoolproject.teacherdashboard")->with("showModal", true);
+  }
+ 
 }
 
 // sending result form
 
 public function sendresultform(Request $request){
+
   $class  = $request->class;
   $term = $request->term;
   $session = $request->session;
@@ -1415,11 +1628,53 @@ public function sendresultform(Request $request){
   ->get();
 // return $session;
   // return $term;
-  return view("schoolproject.teachersendresult", compact("selectStudent",  "subject"));
+  return view("schoolproject.teachersendresult", compact("selectStudent","subject"));
 }
 public function finalapproveresult(Request $request){
   return view("schoolproject.finalapproveresult");
 }
+// incoming result
+public function incomingresult(Request $request){
+  $class = DB::table("teachers")->where("id", Session::get("teacher_id"))->first();
+ $academic = DB::table("academicsessions")
+ ->select("academic_session")
+ ->distinct()
+ ->get();
+ $subjectIds = DB::table("sendresults")
+ ->where("class", $class->classteacher)
+ ->select("subjectId")
+ ->distinct()
+ ->pluck("subjectId");
+
+$subjects = DB::table("subjects")
+ ->whereIn("id", $subjectIds)
+ ->get();
+
+  return view("schoolproject.incomingresult", compact("academic","class","subjects","subjectIds"));
+}
+public function viewIncoming(Request $request){
+  return view("schoolproject.viewIncoming");
+}
+
+public function incomingresultform(Request $request){
+   $class = $request->class;
+   $term = $request->term;
+   $subject = $request->subject;
+   $session = $request->session;
+
+   $selectAll = DB::table("sendresults")->where([
+"class"=>$class,
+"term"=>$term,
+"subjectId"=>$subject,
+"session"=>$session,
+   ])->get();
+  
+   $StudentSubject = DB::table("subjects")->where("id", $subject)
+   ->first(); 
+   return view("schoolproject.viewIncoming", compact("selectAll","StudentSubject"));
+}
+
+
 // update principal report
 public function updateprincipalreport(Request $request){
   $term = $request->term;

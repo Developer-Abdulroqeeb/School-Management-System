@@ -91,9 +91,7 @@
                                         </div>
                                     </div>
                                 </form>
-                                @if($errors->any())
-                                <p style="color:red;">{{ $errors->first() }}</p>
-                            @endif
+
                                 <div class="table-responsive">
 
                                         <form action="{{route("schoolproject.teachersendresultform")}}" method="POST">
@@ -103,16 +101,20 @@
                                          <select required name="subject" class="select2">
                                          <option value="0" disabled>Please Select</option>
                                          @foreach ($subject as $subjects)
-                                         <option value="{{$subjects->subject_name}}">{{$subjects->subject_name}}</option>
-                                        <input type="hidden" value="{{$subjects->class}}" name="class" id="">
-                                        <input type="hidden" value="{{$subjects->term}}" name="term" id="">
-                                        <input type="hidden" value="{{$subjects->session}}" name="session" id="">
+                                         <option value="{{$subjects->id}}">{{$subjects->subject_name}}</option>
                                          @endforeach
                                              </select>
-                                          </div>               
+                                             <input type="hidden" name="class" value="{{ $subject[0]->class ?? '' }}">
+                                             <input type="hidden" name="term" value="{{ $subject[0]->term ?? '' }}">
+                                             <input type="hidden" name="session" value="{{ $subject[0]->session ?? '' }}">
+                                        </div>    
                                     <table class="table display data-table text-nowrap">
                                         <thead>
-                                                <tr>
+                                       <p style="color:red;">Note: You have to Upload all student at once and avoid mistake</p>
+                                       @if($errors->any())
+                                       <p style="color:red;">{{ $errors->first() }}</p>
+                                   @endif
+                                       <tr>
                                                 <th>                  
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input checkAll">
@@ -125,17 +127,18 @@
                                                 {{-- <th>Action</th> --}}
                                             </tr>
                                         </thead>
+
                                         <tbody>
                               @foreach ($selectStudent as $students)
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
                                                 <td>{{$students->FirstName}} {{$students->LastName}}</td>
                                                 <td><input class="score" name="test[]" type="text"></td>
-                                                <input type="hidden" value="{{$students->id}}" name="" id="">
+                                                <input type="hidden" value="{{$students->id}}" name="studentId[]" id="">
                                                 <td><input class="score" name="exam[]" type="text"></td>
                                             </tr>
-                                            @endforeach
-                                       </tbody>
+                                    @endforeach
+                                        </tbody>
                                     </table>
                                     <button type="submit" name="submit" style="background:rgb(12, 12, 91) ; border: 0; color: white; padding: 7px; border-radius: 7px;">Upload</button>
                     </form> 

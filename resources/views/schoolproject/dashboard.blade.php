@@ -32,6 +32,7 @@
     {{-- <link rel="stylesheet" href="style.css"> --}}
     <!-- Modernize js -->
     <script src="/js/modernizr-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -127,7 +128,7 @@
                                 <div class="col-6">
                                     <div class="item-content">
                                         <div class="item-title">Earnings</div>
-                                        <div class="item-number"><span>$</span><span class="counter" data-num="193000">1,93,000</span></div>
+                                        <div class="item-number"><span>₦</span><span class="counter" data-num="{{ $totalEarnings}}">{{ $totalEarnings}}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -162,11 +163,11 @@
                                     <div class="item-content">
                                         <div class="single-item pseudo-bg-blue">
                                             <h4>Total Collections</h4>
-                                            <span>75,000</span>
+                                            <h3>₦ 75,000</h3>
                                         </div>
                                         <div class="single-item pseudo-bg-red">
                                             <h4>Fees Collection</h4>
-                                            <span>15,000</span>
+                                             <h3>₦ 75,000</h3>
                                         </div>
                                     </div>
                                     <div class="dropdown">
@@ -248,17 +249,20 @@
                                     </div>
                                 </div>
                                 <div class="doughnut-chart-wrap">
-                                    <canvas id="student-doughnut-chart" width="100" height="300"></canvas>
+                                    <canvas id="genderChart" width="400" height="400"></canvas>
                                 </div>
                                 <div class="student-report">
-                                    <div class="student-count pseudo-bg-blue">
+                                 <div class="student-count pseudo-bg">
+                                        <h4 class="item-title">Male Student</h4>
+                                        <div class="item-number">{{ $maleCount}}</div>
+                                    </div>
+                                    <div class="student-count pseudo-bg">
                                         <h4 class="item-title">Female Students</h4>
-                                        <div class="item-number">45,000</div>
+                                        <div class="item-number">
+                                        {{$femaleCount}}
+                                        </div>
                                     </div>
-                                    <div class="student-count pseudo-bg-yellow">
-                                        <h4 class="item-title">Male Students</h4>
-                                        <div class="item-number">1,05,000</div>
-                                    </div>
+                                   
                                 </div>
                             </div>
                         </div>
@@ -291,64 +295,7 @@
                         </div>
                     </div>
                    
-                    <div class="col-lg-6 col-xl-6 col-4-xxxl">
-                        <div class="card dashboard-card-six pd-b-20">
-                            <div class="card-body">
-                                <div class="heading-layout1 mg-b-17">
-                                    <div class="item-title">
-                                        <h3>Notice Board</h3>
-                                    </div>
-                                    <div class="dropdown">
-                                        <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                                            aria-expanded="false">...</a>
-
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="fas fa-times text-orange-red"></i>Close</a>
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="notice-box-wrap">
-                                    <div class="notice-list">
-                                        <div class="post-date bg-skyblue">16 June, 2019</div>
-                                        <h6 class="notice-title"><a href="#">Great School manag mene esom text of the
-                                                printing.</a></h6>
-                                        <div class="entry-meta"> Jennyfar Lopez / <span>5 min ago</span></div>
-                                    </div>
-                                    <div class="notice-list">
-                                        <div class="post-date bg-yellow">16 June, 2019</div>
-                                        <h6 class="notice-title"><a href="#">Great School manag printing.</a></h6>
-                                        <div class="entry-meta"> Jennyfar Lopez / <span>5 min ago</span></div>
-                                    </div>
-                                    <div class="notice-list">
-                                        <div class="post-date bg-pink">16 June, 2019</div>
-                                        <h6 class="notice-title"><a href="#">Great School manag meneesom.</a></h6>
-                                        <div class="entry-meta"> Jennyfar Lopez / <span>5 min ago</span></div>
-                                    </div>
-                                    <div class="notice-list">
-                                        <div class="post-date bg-skyblue">16 June, 2019</div>
-                                        <h6 class="notice-title"><a href="#">Great School manag mene esom text of the
-                                                printing.</a></h6>
-                                        <div class="entry-meta"> Jennyfar Lopez / <span>5 min ago</span></div>
-                                    </div>
-                                    <div class="notice-list">
-                                        <div class="post-date bg-yellow">16 June, 2019</div>
-                                        <h6 class="notice-title"><a href="#">Great School manag printing.</a></h6>
-                                        <div class="entry-meta"> Jennyfar Lopez / <span>5 min ago</span></div>
-                                    </div>
-                                    <div class="notice-list">
-                                        <div class="post-date bg-pink">16 June, 2019</div>
-                                        <h6 class="notice-title"><a href="#">Great School manag meneesom.</a></h6>
-                                        <div class="entry-meta"> Jennyfar Lopez / <span>5 min ago</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            
                 </div>
                 <!-- Dashboard Content End Here -->
                 <!-- Social Media Start Here -->
@@ -364,6 +311,7 @@
         </div>
         <!-- Page Area End Here -->
     </div>
+    
     <!-- jquery-->
     <script src="/js/jquery-3.3.1.min.js"></script>
     <!-- Plugins js -->
@@ -386,7 +334,31 @@
     <script src="/js/Chart.min.js"></script>
     <!-- Custom Js -->
     <script src="/js/main.js"></script>
-
+<script>
+    const ctx = document.getElementById('genderChart').getContext('2d');
+    const genderChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Male', 'Female'],
+            datasets: [{
+                data: [{{ $femaleCount }}, {{ $maleCount }}],
+                backgroundColor: ['green', 'pink']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Student Gender Distribution'
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+  </script>
 </body>
 
 

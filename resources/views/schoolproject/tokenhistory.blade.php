@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AKKHOR | Result Sending</title>
+    <title>AKKHOR | Token</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -38,7 +38,7 @@
     <div id="wrapper" class="wrapper bg-ash">
         <!-- Header Menu Area Start Here -->
         <div class="navbar navbar-expand-md header-menu-one bg-light">
-            @include('schoolproject.teachernav')  
+            @include('schoolproject.studentnavbar');  
 
                 <div class="d-md-none mobile-nav-bar">
                    <button class="navbar-toggler pulse-animation" type="button" data-toggle="collapse" data-target="#mobile-navbar" aria-expanded="false">
@@ -55,98 +55,85 @@
         <div class="dashboard-page-one">
             <!-- Sidebar Area Start Here -->
             <div class="sidebar-main sidebar-menu-one sidebar-expand-md sidebar-color">
-                @include("schoolproject.teachersidebar");
+                @include("schoolproject.studentsidebar");
              </div>
             <!-- Sidebar Area End Here -->
             <div class="dashboard-content-one">
                 <!-- Breadcubs Area Start Here -->
                 <div class="breadcrumbs-area">
-                    <h3>Continue</h3>
+                    <h3>Token</h3>
                     <ul>
                         <li>
                             <a href="index.html">Home</a>
                         </li>
-                        <li>Result</li>
+                        <li>Token History</li>
                     </ul>
                 </div>
                 <!-- Breadcubs Area End Here -->
                 <!-- Dashboard summery Start Here -->
-                <form class="new-added-form" method="POST" action="{{route("schoolproject.sendresultform")}}">
-                @csrf
-                    <div class="row" style="background: white; padding:20px;">
-                  
-                <div class="col-xl-3 col-lg-6 col-12 form-group">
-                    <label>Class</label>
-                    <select class="select2" required name="class" id="">
-                        @foreach ($class as $studentclass)
-                        <option value="{{ $studentclass->class}}">
-                            {{ $studentclass->class}}
-                        </option>
-                        @endforeach
-             
-                    </select>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-12 form-group">
-                    <label>Term</label>
-                    <select class="select2"  required name="term" id="">
-                        <option value="First Term">
-                            First Term
-                        </option>
-                        <option value="Second Term">
-                            Second Term
-                        </option>
-                        <option value="Third Term">
-                            Third Term
-                        </option>
-                    </select>
-                </div>
-                <div class="col-xl-3 col-lg-6 col-12 form-group">
-                    <label>Session</label>
-                    <select class="select2"  required name="session" id="">
-                       @foreach ($academic as $session )
-                       <option value="{{$session->academic_session }}">
-                       {{$session->academic_session}} 
-                       </option>      
-                       @endforeach
-                    </select>
-                </div>
-                </div>
-                <button type="submit" name="submit" style="background: rgb(25, 25, 118); padding: 10px; border-radius: 10px; border: 0; color: white;">Continue</button>
+                <div class="col-xl-8 col-12" id="printableArea">
+                    <div class="card dashboard-card-eleven">
+                        <div class="card-body">
+                            <div class="heading-layout1">
+                                <div class="item-title">
+                                    <h3></h3>
+                                </div>
+                                {{-- @foreach ($approve as $approves)
+                                @if (!empty($approves->Schoolstamp))
+                                <h2 style="background: green; color: white; padding: 10px;">APPROVED</h2>
+                                @endif
+                                @endforeach --}}
+                            </div>
+                            <div class="table-box-wrap">
+                              
+                                <div class="table-responsive result-table-box" >
+                                        <table class="table display data-table text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                      S/N  {{-- {{$loop->iteration}} --}}
+                                                    </th>
+                                                    <th>session</th>
+                                                    <th>Class</th>
+                                                            <th>term</th>
+                                                    <th>token</th>
+                                            
 
-                </form>
-                {{-- modal start --}}
-                <div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="thankYouModalLabel">Failed !!!</h5>
-                          {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button> --}}
+                                                </tr>
+                                          </thead>
+                                          <tbody>     
+               @foreach ($query as $result)
+                       <tr>
+                        <td>{{$loop->iteration}}</td>         
+           <td>{{$result->session}}</td>
+           <td>{{$result->class}}</td>
+           <td>{{$result->term}}</td>
+           <td>{{$result->token}}</td>
+     
+                
+                 </tr>                                                           
+                   @endforeach
+                                                </tbody>
+                                       
+                                        </table>
+
+                                    </div>
+                                    
+                            </div>
+                          
                         </div>
-                        <div class="modal-body" style="color: red;">
-                            Already Added Results for these students for this term and session
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                  {{-- modal end --}}
+                </div>
+
                 <footer class="footer-wrap-layout1">
-                    <div class="copyright">© Copyrights <a href="#">akkhor</a> 2019. All rights reserved. Designed by <a
-                            href="#">PsdBosS</a></div>
+                    <div class="copyright">© Copyrights <a href="#">akkhor</a> 2019. All rights reserved. Designed by 
+                    <a href="#">PsdBosS</a></div>
                 </footer>
                 <!-- Dashboard Content End Here -->
             </div>
         </div>
-        <!-- Page Area End Here -->
+<!-- Page Area End Here -->
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    @if(session('showModal'))
-    <script>
-        window.addEventListener('load', function () {
-            var myModal = new bootstrap.Modal(document.getElementById('thankYouModal'));
-            myModal.show();
-        });
-    </script>
-    @endif
     <!-- jquery-->
     <script src="/js/jquery-3.3.1.min.js"></script>
     <!-- Plugins js -->
@@ -166,6 +153,7 @@
     <!-- Custom Js -->
     <script src="/js/main.js"></script>
     <script src="/js/select2.min.js"></script>
+  
 </body>
 
 

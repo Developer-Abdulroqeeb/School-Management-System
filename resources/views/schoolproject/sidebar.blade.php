@@ -78,6 +78,9 @@
                             <a href="#" class="nav-link"><i class="flaticon-technological"></i><span>Account</span></a>
                             <ul class="nav sub-group-menu">
                                 <li class="nav-item">
+                                    <a href="{{route("schoolproject.addbank")}}" class="nav-link"><i class="fas fa-angle-right"></i>Add Bank</a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{route("schoolproject.all_fees")}}" class="nav-link"><i class="fas fa-angle-right"></i>All Fees Collection</a>
                                 </li>
                                 {{-- <li class="nav-item">
